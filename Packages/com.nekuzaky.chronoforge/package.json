@@ -1,0 +1,30 @@
+{
+  "name": "com.nekuzaky.chronoforge",
+  "version": "0.2.0",
+  "displayName": "Chronoforge",
+  "description": "Premium build order editor for Unity. Author, simulate, validate, compare and export build orders for RTS, colony sims, tactical and management games — faster than a spreadsheet. Keyboard-first workflow, generic data model, strict runtime/editor separation.",
+  "unity": "6000.0",
+  "author": {
+    "name": "nekuzaky"
+  },
+  "keywords": [
+    "rts",
+    "build-order",
+    "editor-tool",
+    "timeline",
+    "game-design",
+    "strategy",
+    "planning"
+  ],
+  "type": "tool",
+  "hideInEditor": false,
+  "samples": [
+    {
+      "displayName": "Starter Templates",
+      "description": "Example build orders showing steps, branches, tags and a resource model.",
+      "path": "Samples~/StarterTemplates"
+    }
+  ],
+  "documentationUrl": "https://github.com/nekuzaky/chronoforge",
+  "changelogUrl": "https://github.com/nekuzaky/chronoforge/blob/main/CHANGELOG.md"
+}
