@@ -13,7 +13,7 @@ namespace Chronoforge
     public sealed class BuildOrderAsset : ScriptableObject
     {
         /// <summary>Bumped whenever the serialized shape changes. Read by the serializer for migration.</summary>
-        public const int k_SchemaVersion = 1;
+        public const int k_SchemaVersion = 2;
 
         #region Metadata
         public int m_SchemaVersion = k_SchemaVersion;
@@ -29,6 +29,7 @@ namespace Chronoforge
         public List<BuildOrderBranch> m_Branches = new();
         public List<BuildOrderTag> m_Tags = new();
         public List<BuildOrderResourceRate> m_ResourceModel = new();
+        public List<BuildOrderBenchmark> m_Benchmarks = new();
         #endregion
 
         #region History

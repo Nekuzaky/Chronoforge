@@ -4,6 +4,20 @@ All notable changes to Chronoforge are documented here. Format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning is
 [SemVer](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+- **Benchmarks** — user-defined checkpoints (`BuildOrderBenchmark`) that the evaluator
+  compares against the simulated timeline, flagging supply/timing slippage. Research-backed
+  (Liquipedia timings & benchmarks). Generic; no game-specific metric hardcoded.
+- `BuildOrderEvaluation.Run(asset)` — single runtime entry point that simulates, validates
+  and checks benchmarks in one call.
+- `Documentation~/design-notes.md` — research synthesis (GDC tools talks, RTS benchmark
+  theory, data-driven studios) mapping findings to product decisions.
+
+### Changed
+- Schema bumped to v2 (adds `m_Benchmarks`). v1 payloads still import cleanly.
+
 ## [0.2.0] - Unreleased
 
 ### Added

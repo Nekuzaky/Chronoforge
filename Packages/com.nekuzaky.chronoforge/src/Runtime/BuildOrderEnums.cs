@@ -64,6 +64,7 @@ namespace Chronoforge
         BrokenBranch,
         SuspiciousOrder,
         ResourceShortfall,
+        BenchmarkMissed,
         IncompleteData
     }
 

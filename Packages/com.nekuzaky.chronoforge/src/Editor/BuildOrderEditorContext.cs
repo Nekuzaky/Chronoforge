@@ -175,8 +175,7 @@ namespace Chronoforge.Editor
                 return;
             }
 
-            m_Evaluation = BuildOrderSimulator.Evaluate(m_Asset);
-            m_Evaluation.m_Issues.AddRange(BuildOrderValidator.Validate(m_Asset));
+            m_Evaluation = BuildOrderEvaluation.Run(m_Asset);
             ApplyValidationStates();
         }
         #endregion
