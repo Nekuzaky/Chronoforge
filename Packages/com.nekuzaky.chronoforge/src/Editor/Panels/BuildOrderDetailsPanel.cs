@@ -48,7 +48,7 @@ namespace Chronoforge.Editor
         {
             AddSubHeader("Identity");
 
-            var title = new TextField("Title") { value = step.m_Title };
+            var title = new TextField("Title") { value = step.m_Title, isDelayed = true };
             title.RegisterValueChangedCallback(evt => Commit(() => step.m_Title = evt.newValue, "Edit Title"));
             _body.Add(title);
 
@@ -56,7 +56,7 @@ namespace Chronoforge.Editor
             type.RegisterValueChangedCallback(evt => Commit(() => step.m_Type = (BuildOrderActionType)evt.newValue, "Edit Type"));
             _body.Add(type);
 
-            var description = new TextField("Description") { value = step.m_Description, multiline = true };
+            var description = new TextField("Description") { value = step.m_Description, multiline = true, isDelayed = true };
             description.RegisterValueChangedCallback(evt => Commit(() => step.m_Description = evt.newValue, "Edit Description"));
             _body.Add(description);
         }
@@ -65,7 +65,7 @@ namespace Chronoforge.Editor
         {
             AddSubHeader("Timing & supply");
 
-            var supply = new IntegerField("Supply") { value = step.m_Supply };
+            var supply = new IntegerField("Supply") { value = step.m_Supply, isDelayed = true };
             supply.RegisterValueChangedCallback(evt => Commit(() => step.m_Supply = evt.newValue, "Edit Supply"));
             _body.Add(supply);
 
@@ -78,15 +78,15 @@ namespace Chronoforge.Editor
             });
             _body.Add(time);
 
-            var popReq = new IntegerField("Pop. requirement") { value = step.m_PopulationRequirement };
+            var popReq = new IntegerField("Pop. requirement") { value = step.m_PopulationRequirement, isDelayed = true };
             popReq.RegisterValueChangedCallback(evt => Commit(() => step.m_PopulationRequirement = evt.newValue, "Edit Pop Requirement"));
             _body.Add(popReq);
 
-            var popDelta = new IntegerField("Pop. delta") { value = step.m_PopulationDelta };
+            var popDelta = new IntegerField("Pop. delta") { value = step.m_PopulationDelta, isDelayed = true };
             popDelta.RegisterValueChangedCallback(evt => Commit(() => step.m_PopulationDelta = evt.newValue, "Edit Pop Delta"));
             _body.Add(popDelta);
 
-            var duration = new FloatField("Est. duration (s)") { value = step.m_EstimatedDuration };
+            var duration = new FloatField("Est. duration (s)") { value = step.m_EstimatedDuration, isDelayed = true };
             duration.RegisterValueChangedCallback(evt => Commit(() => step.m_EstimatedDuration = evt.newValue, "Edit Duration"));
             _body.Add(duration);
         }
@@ -110,11 +110,11 @@ namespace Chronoforge.Editor
                 var row = new VisualElement();
                 row.AddToClassList("cf-field-row");
 
-                var id = new TextField { value = amount.m_ResourceId };
+                var id = new TextField { value = amount.m_ResourceId, isDelayed = true };
                 id.style.flexGrow = 1;
                 id.RegisterValueChangedCallback(evt => Commit(() => amount.m_ResourceId = evt.newValue, "Edit Resource"));
 
-                var value = new FloatField { value = amount.m_Amount };
+                var value = new FloatField { value = amount.m_Amount, isDelayed = true };
                 value.style.width = 70;
                 value.RegisterValueChangedCallback(evt => Commit(() => amount.m_Amount = evt.newValue, "Edit Cost"));
 
@@ -177,7 +177,7 @@ namespace Chronoforge.Editor
             repeatable.RegisterValueChangedCallback(evt => Commit(() => step.m_Repeatable = evt.newValue, "Toggle Repeatable"));
             _body.Add(repeatable);
 
-            var notes = new TextField("Designer notes") { value = step.m_DesignerNotes, multiline = true };
+            var notes = new TextField("Designer notes") { value = step.m_DesignerNotes, multiline = true, isDelayed = true };
             notes.RegisterValueChangedCallback(evt => Commit(() => step.m_DesignerNotes = evt.newValue, "Edit Notes"));
             _body.Add(notes);
         }

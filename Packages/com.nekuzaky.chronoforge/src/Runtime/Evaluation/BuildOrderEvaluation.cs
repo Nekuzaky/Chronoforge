@@ -11,7 +11,7 @@ namespace Chronoforge
         {
             BuildOrderEvaluationResult result = BuildOrderSimulator.Evaluate(asset);
             result.m_Issues.AddRange(BuildOrderValidator.Validate(asset));
-            result.m_Issues.AddRange(BuildOrderBenchmarkEvaluator.Evaluate(asset, result));
+            BuildOrderBenchmarkEvaluator.Evaluate(asset, result);
             return result;
         }
     }

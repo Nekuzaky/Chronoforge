@@ -159,6 +159,33 @@ namespace Chronoforge.Editor
         /// <summary>Call after a ListView drag reorder mutated the live list.</summary>
         public void NotifyReordered() => NotifyChanged();
 
+        public void AddBenchmark()
+        {
+            if (m_Asset == null)
+                return;
+
+            RecordUndo("Add Benchmark");
+            float anchor = m_Evaluation.m_TotalSeconds > 0f ? m_Evaluation.m_TotalSeconds : 60f;
+            m_Asset.m_Benchmarks.Add(new BuildOrderBenchmark
+            {
+                m_Label = $"Checkpoint {m_Asset.m_Benchmarks.Count + 1}",
+                m_AnchorTimeSeconds = anchor,
+                m_CheckSupply = true,
+                m_ExpectedSupply = m_Evaluation.m_FinalSupply
+            });
+            NotifyChanged();
+        }
+
+        public void RemoveBenchmark(BuildOrderBenchmark benchmark)
+        {
+            if (m_Asset == null || benchmark == null)
+                return;
+
+            RecordUndo("Remove Benchmark");
+            m_Asset.m_Benchmarks.Remove(benchmark);
+            NotifyChanged();
+        }
+
         public void RecordUndo(string name)
         {
             if (m_Asset != null)

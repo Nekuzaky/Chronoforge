@@ -12,6 +12,7 @@ namespace Chronoforge
     {
         public List<BuildOrderTimelineEntry> m_Timeline = new();
         public List<BuildOrderValidationIssue> m_Issues = new();
+        public List<BuildOrderBenchmarkResult> m_BenchmarkResults = new();
         public float m_TotalSeconds;
         public int m_FinalSupply;
 

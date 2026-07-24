@@ -16,6 +16,7 @@ testable runtime layer from a UI Toolkit editor workspace.
 | `BuildOrderRequirement` | A prerequisite pointing at a step / resource / key. |
 | `BuildOrderResourceCost` | Per-resource cost lines, plus the economy model rate type. |
 | `BuildOrderTag` | Reusable label for filtering. |
+| `BuildOrderBenchmark` | A target checkpoint (supply and/or required-step-by-time). |
 | `BuildOrderSnapshot` | Timestamped serialized copy for history / comparison. |
 
 ## Business logic (runtime, UI-agnostic)
@@ -23,6 +24,9 @@ testable runtime layer from a UI Toolkit editor workspace.
 - `BuildOrderValidator.Validate(asset)` → `List<BuildOrderValidationIssue>`.
 - `BuildOrderSimulator.Evaluate(asset)` → `BuildOrderEvaluationResult`
   (timeline, total time, final supply, shortfall issues).
+- `BuildOrderBenchmarkEvaluator.Evaluate(asset, result)` — checks benchmarks, writing
+  per-checkpoint results and issues into the result.
+- `BuildOrderEvaluation.Run(asset)` — one call = simulate + validate + benchmark.
 - `BuildOrderSerializer` — `ExportJson` / `ImportJson` (schema-versioned) and
   `ExportText`.
 
@@ -30,9 +34,9 @@ testable runtime layer from a UI Toolkit editor workspace.
 
 `BuildOrderEditorWindow` hosts the workspace. State is centralised in
 `BuildOrderEditorContext`; panels (`BuildOrderListView`, `BuildOrderDetailsPanel`,
-`BuildOrderTimelineView`, `BuildOrderValidationPanel`, `BuildOrderExportPanel`,
-`BuildOrderQuickAddBar`, `BuildOrderSearchBar`) subscribe to its `Changed` and
-`SelectionChanged` events and rebuild themselves.
+`BuildOrderTimelineView`, `BuildOrderBenchmarkPanel`, `BuildOrderValidationPanel`,
+`BuildOrderExportPanel`, `BuildOrderQuickAddBar`, `BuildOrderSearchBar`) subscribe to its
+`Changed` and `SelectionChanged` events and rebuild themselves.
 
 ### Shortcuts
 

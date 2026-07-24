@@ -30,6 +30,7 @@ baked into.
 | --- | --- |
 | 🗂️ **Three-column workspace** | Step list · step details · timeline + validation, all live. |
 | ⌨️ **Keyboard-first** | Add steps with `1`–`6`, duplicate with `Ctrl+D`, delete with `Del`, drag to reorder. |
+| 🎯 **Benchmarks** | Author timing/supply checkpoints ("Factory by 2:24 at 23 supply"); live pass/fail per checkpoint and markers over the timeline. |
 | ✅ **Live validation** | 12 rules — timing, supply, cost, prerequisites, branches, duplicates, incomplete data — surfaced without blocking editing. |
 | 📊 **Lightweight simulation** | Timeline, cumulative supply, and resource shortfall against an optional per-resource economy model. |
 | 🔀 **Conditional branches** | Named variation lanes gated by designer-authored conditions. |
@@ -113,6 +114,7 @@ Packages/com.nekuzaky.chronoforge/
 
 - [x] Runtime foundation — data model, validation, simulation, serialization
 - [x] UI Toolkit editor workspace — list, details, timeline, validation, export
+- [x] Benchmarks — checkpoint authoring, live pass/fail, timeline markers
 - [ ] Full branch / tag / prerequisite editors
 - [ ] Planned-vs-actual comparison view
 - [ ] Snapshot restore from history

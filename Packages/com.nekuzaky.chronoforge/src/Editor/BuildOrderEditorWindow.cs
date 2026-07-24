@@ -21,6 +21,7 @@ namespace Chronoforge.Editor
         private BuildOrderDetailsPanel _detailsPanel;
         private BuildOrderValidationPanel _validationPanel;
         private BuildOrderTimelineView _timelineView;
+        private BuildOrderBenchmarkPanel _benchmarkPanel;
         private Label _status;
 
         #region Entry points
@@ -119,11 +120,16 @@ namespace Chronoforge.Editor
             var sideColumn = new VisualElement();
             sideColumn.AddToClassList("cf-column");
             sideColumn.AddToClassList("cf-column--side");
+            var sideScroll = new ScrollView(ScrollViewMode.Vertical);
+            sideScroll.style.flexGrow = 1;
             _timelineView = new BuildOrderTimelineView(_context);
-            sideColumn.Add(_timelineView);
+            sideScroll.Add(_timelineView);
+            _benchmarkPanel = new BuildOrderBenchmarkPanel(_context);
+            sideScroll.Add(_benchmarkPanel);
             _validationPanel = new BuildOrderValidationPanel(_context);
-            sideColumn.Add(_validationPanel);
-            sideColumn.Add(new BuildOrderExportPanel(_context));
+            sideScroll.Add(_validationPanel);
+            sideScroll.Add(new BuildOrderExportPanel(_context));
+            sideColumn.Add(sideScroll);
 
             body.Add(listColumn);
             body.Add(detailsColumn);
@@ -151,6 +157,7 @@ namespace Chronoforge.Editor
             _detailsPanel.Rebuild();
             _validationPanel.Rebuild();
             _timelineView.Rebuild();
+            _benchmarkPanel.Rebuild();
             UpdateStatus();
         }
 

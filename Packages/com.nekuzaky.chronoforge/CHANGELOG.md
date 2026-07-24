@@ -12,6 +12,11 @@ All notable changes to Chronoforge are documented here. Format follows
   (Liquipedia timings & benchmarks). Generic; no game-specific metric hardcoded.
 - `BuildOrderEvaluation.Run(asset)` — single runtime entry point that simulates, validates
   and checks benchmarks in one call.
+- **Benchmarks editor panel** — author checkpoints (label, time, supply target, required
+  step) with a live pass/fail dot and computed detail per row, plus vertical checkpoint
+  markers drawn over the timeline (green pass / amber miss).
+- Side column is now scrollable to host timeline, benchmarks, validation and export.
+- Text/numeric fields commit on Enter/blur (`isDelayed`) — no focus loss while typing.
 - `Documentation~/design-notes.md` — research synthesis (GDC tools talks, RTS benchmark
   theory, data-driven studios) mapping findings to product decisions.
 

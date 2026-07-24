@@ -5,8 +5,9 @@ namespace Chronoforge.Editor
 {
     /// <summary>
     /// Horizontal timeline of the simulated build order. Each step is a bar positioned by start
-    /// time and sized by estimated duration; shortfall steps turn red. Clicking a bar selects
-    /// the step. Purely a view over <see cref="BuildOrderEvaluationResult"/>.
+    /// time and sized by estimated duration; shortfall steps turn red. Benchmark checkpoints are
+    /// drawn as vertical markers over the bars, coloured by pass/fail. Clicking a bar selects the
+    /// step. Purely a view over the evaluation result.
     /// </summary>
     public sealed class BuildOrderTimelineView : VisualElement
     {
@@ -43,8 +44,15 @@ namespace Chronoforge.Editor
             }
 
             float total = Mathf.Max(1f, evaluation.m_TotalSeconds);
+
+            var track = new VisualElement();
+            track.style.position = Position.Relative;
+
             foreach (BuildOrderTimelineEntry entry in evaluation.m_Timeline)
-                _body.Add(BuildBar(entry, total));
+                track.Add(BuildBar(entry, total));
+
+            AddBenchmarkMarkers(track, total);
+            _body.Add(track);
         }
 
         private VisualElement BuildBar(BuildOrderTimelineEntry entry, float total)
@@ -66,6 +74,40 @@ namespace Chronoforge.Editor
 
             bar.RegisterCallback<ClickEvent>(_ => _context.Select(entry.m_StepId));
             return bar;
+        }
+
+        private void AddBenchmarkMarkers(VisualElement track, float total)
+        {
+            var benchmarks = _context.m_Asset.m_Benchmarks;
+            for (int i = 0; i < benchmarks.Count; i++)
+            {
+                BuildOrderBenchmark benchmark = benchmarks[i];
+                var marker = new VisualElement();
+                marker.AddToClassList("cf-timeline__marker");
+
+                bool passed = ResultPassed(i, out bool hasResult);
+                if (hasResult)
+                    marker.EnableInClassList(passed ? "cf-timeline__marker--pass" : "cf-timeline__marker--fail", enable: true);
+
+                float leftPercent = Mathf.Clamp(benchmark.m_AnchorTimeSeconds / total * 100f, 0f, 100f);
+                marker.style.left = Length.Percent(leftPercent);
+                marker.tooltip = $"{(string.IsNullOrEmpty(benchmark.m_Label) ? "Benchmark" : benchmark.m_Label)}  ({benchmark.DisplayAnchor})";
+                track.Add(marker);
+            }
+        }
+
+        private bool ResultPassed(int index, out bool hasResult)
+        {
+            foreach (BuildOrderBenchmarkResult result in _context.m_Evaluation.m_BenchmarkResults)
+            {
+                if (result.m_BenchmarkIndex == index)
+                {
+                    hasResult = true;
+                    return result.m_Passed;
+                }
+            }
+            hasResult = false;
+            return true;
         }
     }
 }

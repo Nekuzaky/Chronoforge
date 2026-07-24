@@ -206,6 +206,51 @@
     background-color: rgb(224, 84, 74);
 }
 
+.cf-timeline__marker {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: rgba(140, 155, 171, 0.55);
+}
+
+.cf-timeline__marker--pass { background-color: rgba(92, 184, 92, 0.8); }
+.cf-timeline__marker--fail { background-color: rgba(224, 168, 52, 0.9); }
+
+/* ---- Benchmarks ---- */
+.cf-benchmark {
+    flex-direction: column;
+    margin: 4px 8px 6px 8px;
+    padding: 6px 8px;
+    border-radius: 4px;
+    background-color: rgb(36, 39, 44);
+    border-left-width: 2px;
+    border-left-color: rgb(60, 64, 70);
+}
+
+.cf-benchmark__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    margin-right: 8px;
+    background-color: rgb(90, 96, 104);
+}
+
+.cf-benchmark__dot--pass { background-color: rgb(92, 184, 92); }
+.cf-benchmark__dot--fail { background-color: rgb(224, 168, 52); }
+
+.cf-benchmark__detail {
+    margin-top: 4px;
+    font-size: 10px;
+    color: rgb(140, 148, 158);
+    -unity-font-style: italic;
+}
+
+.cf-benchmark .unity-base-field__label {
+    min-width: 64px;
+    color: rgb(150, 158, 168);
+}
+
 /* ---- Empty states ---- */
 .cf-empty {
     flex-grow: 1;
