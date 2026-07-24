@@ -1,0 +1,21 @@
+{
+    "m_SchemaVersion": 1,
+    "m_Title": "Aggressive Opening (Example)",
+    "m_Game": "Generic RTS",
+    "m_Faction": "Swarm",
+    "m_Description": "Sample build order showing steps, supply, timing and a resource cost. Import via Chronoforge ▸ Import JSON.",
+    "m_Author": "nekuzaky",
+    "m_Steps": [
+        { "m_Id": "a1", "m_Title": "Worker", "m_Type": 3, "m_Supply": 12, "m_TimeSeconds": 0, "m_PopulationDelta": 1, "m_ResourceCost": { "m_Amounts": [ { "m_ResourceId": "minerals", "m_Amount": 50 } ] } },
+        { "m_Id": "a2", "m_Title": "Spawning Pool", "m_Type": 1, "m_Supply": 13, "m_TimeSeconds": 24, "m_ResourceCost": { "m_Amounts": [ { "m_ResourceId": "minerals", "m_Amount": 200 } ] } },
+        { "m_Id": "a3", "m_Title": "Overlord", "m_Type": 0, "m_Supply": 13, "m_TimeSeconds": 30, "m_PopulationDelta": 8, "m_ResourceCost": { "m_Amounts": [ { "m_ResourceId": "minerals", "m_Amount": 100 } ] } },
+        { "m_Id": "a4", "m_Title": "Scout with worker", "m_Type": 4, "m_Supply": 13, "m_TimeSeconds": 35, "m_DesignerNotes": "Check for early expand." },
+        { "m_Id": "a5", "m_Title": "First attack wave", "m_Type": 5, "m_Supply": 16, "m_TimeSeconds": 120, "m_Priority": 3 }
+    ],
+    "m_Branches": [],
+    "m_Tags": [],
+    "m_ResourceModel": [
+        { "m_ResourceId": "minerals", "m_StartingAmount": 50, "m_IncomePerSecond": 1.4 }
+    ],
+    "m_Snapshots": []
+}
