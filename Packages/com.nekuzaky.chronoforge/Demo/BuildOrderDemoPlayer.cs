@@ -19,6 +19,7 @@ namespace Chronoforge.Demo
         private float _elapsed;
         private bool _playing;
         private Vector2 _scroll;
+        private GUIStyle _richLabel;
 
         private void OnEnable() => Reload();
 
@@ -117,7 +118,7 @@ namespace Chronoforge.Demo
             return index >= 0 ? _evaluation.m_Timeline[index].m_ProjectedSupply : 0;
         }
 
-        private static GUIStyle RichLabel() => new(GUI.skin.label) { richText = true };
+        private GUIStyle RichLabel() => _richLabel ??= new GUIStyle(GUI.skin.label) { richText = true };
         #endregion
     }
 }

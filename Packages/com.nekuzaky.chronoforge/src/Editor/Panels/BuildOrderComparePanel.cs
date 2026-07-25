@@ -16,6 +16,9 @@ namespace Chronoforge.Editor
         private readonly VisualElement _body;
         private int _snapshotIndex;
 
+        private BuildOrderAsset _cachedBaseline;
+        private string _cachedId = "";
+
         public BuildOrderComparePanel(BuildOrderEditorContext context)
         {
             _context = context;
@@ -27,6 +30,7 @@ namespace Chronoforge.Editor
             _body = new VisualElement();
             Add(_body);
 
+            RegisterCallback<DetachFromPanelEvent>(_ => ReleaseBaseline());
             Rebuild();
         }
 
@@ -66,7 +70,7 @@ namespace Chronoforge.Editor
 
         private void RenderDiff(BuildOrderSnapshot snapshot)
         {
-            BuildOrderAsset baseline = BuildOrderSerializer.CreateFromJson(snapshot.m_Json, out string error);
+            BuildOrderAsset baseline = GetBaseline(snapshot, out string error);
             if (baseline == null)
             {
                 var failed = new Label($"Snapshot unreadable: {error}");
@@ -75,35 +79,53 @@ namespace Chronoforge.Editor
                 return;
             }
 
-            try
+            BuildOrderDiff diff = BuildOrderComparer.Compare(baseline, _context.m_Asset);
+
+            var summary = new Label($"+{diff.m_Added} added   ·   -{diff.m_Removed} removed   ·   ~{diff.m_Changed} changed");
+            summary.AddToClassList("cf-benchmark__detail");
+            summary.style.paddingLeft = 8;
+            _body.Add(summary);
+
+            if (!diff.HasChanges)
             {
-                BuildOrderDiff diff = BuildOrderComparer.Compare(baseline, _context.m_Asset);
-
-                var summary = new Label($"+{diff.m_Added} added   ·   -{diff.m_Removed} removed   ·   ~{diff.m_Changed} changed");
-                summary.AddToClassList("cf-benchmark__detail");
-                summary.style.paddingLeft = 8;
-                _body.Add(summary);
-
-                if (!diff.HasChanges)
-                {
-                    var clean = new Label("Identical to baseline.");
-                    clean.AddToClassList("cf-empty__text");
-                    clean.style.paddingLeft = 8;
-                    _body.Add(clean);
-                    return;
-                }
-
-                foreach (BuildOrderDiffEntry entry in diff.m_Entries)
-                {
-                    if (entry.m_ChangeType == BuildOrderChangeType.Unchanged)
-                        continue;
-                    _body.Add(BuildDiffRow(entry));
-                }
+                var clean = new Label("Identical to baseline.");
+                clean.AddToClassList("cf-empty__text");
+                clean.style.paddingLeft = 8;
+                _body.Add(clean);
+                return;
             }
-            finally
+
+            foreach (BuildOrderDiffEntry entry in diff.m_Entries)
             {
-                Object.DestroyImmediate(baseline);
+                if (entry.m_ChangeType == BuildOrderChangeType.Unchanged)
+                    continue;
+                _body.Add(BuildDiffRow(entry));
             }
+        }
+
+        /// <summary>
+        /// Rehydrates the snapshot into a detached asset, cached by snapshot id so repeated
+        /// refreshes don't re-parse. The cached instance is released on id change or panel detach.
+        /// </summary>
+        private BuildOrderAsset GetBaseline(BuildOrderSnapshot snapshot, out string error)
+        {
+            error = "";
+            string id = string.IsNullOrEmpty(snapshot.m_Id) ? snapshot.m_TimestampUtc : snapshot.m_Id;
+            if (_cachedBaseline != null && _cachedId == id)
+                return _cachedBaseline;
+
+            ReleaseBaseline();
+            _cachedBaseline = BuildOrderSerializer.CreateFromJson(snapshot.m_Json, out error);
+            _cachedId = _cachedBaseline != null ? id : "";
+            return _cachedBaseline;
+        }
+
+        private void ReleaseBaseline()
+        {
+            if (_cachedBaseline != null)
+                Object.DestroyImmediate(_cachedBaseline);
+            _cachedBaseline = null;
+            _cachedId = "";
         }
 
         private VisualElement BuildDiffRow(BuildOrderDiffEntry entry)

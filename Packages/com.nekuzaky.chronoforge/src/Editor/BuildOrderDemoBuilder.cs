@@ -20,6 +20,10 @@ namespace Chronoforge.Editor
         [MenuItem("Chronoforge/Create Demo Scene", priority = 20)]
         public static void CreateDemoScene()
         {
+            // Never discard the user's open scene silently.
+            if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
+                return;
+
             BuildOrderAsset asset = CreateSampleAsset();
 
             Scene scene = EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects, NewSceneMode.Single);

@@ -112,7 +112,25 @@ namespace Chronoforge.Editor
             }
         }
 
-        private void OnItemIndexChanged(int from, int to) => _context.NotifyReordered();
+        private void OnItemIndexChanged(int from, int to)
+        {
+            // The ListView already moved the item in the live list. Briefly revert so we can
+            // record the pre-move state for Undo, then reapply — making the reorder one undo step.
+            var steps = _context.m_Asset.m_Steps;
+            if (from < 0 || to < 0 || from >= steps.Count || to >= steps.Count)
+            {
+                _context.NotifyReordered();
+                return;
+            }
+
+            BuildOrderStep moved = steps[to];
+            steps.RemoveAt(to);
+            steps.Insert(from, moved);
+            _context.RecordUndo("Reorder Steps");
+            steps.RemoveAt(from);
+            steps.Insert(to, moved);
+            _context.NotifyReordered();
+        }
         #endregion
     }
 }
