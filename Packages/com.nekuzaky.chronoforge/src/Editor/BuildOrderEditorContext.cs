@@ -172,8 +172,7 @@ namespace Chronoforge.Editor
         {
             m_Asset = asset;
             SelectOnly(asset != null && asset.m_Steps.Count > 0 ? asset.m_Steps[0].m_Id : "");
-            Reevaluate();
-            RaiseChanged();
+            RaiseChanged();   // Re-evaluates; no need to call Reevaluate() first.
         }
         #endregion
 
@@ -330,6 +329,25 @@ namespace Chronoforge.Editor
             RecordUndo("Remove Benchmark");
             m_Asset.m_Benchmarks.Remove(benchmark);
             NotifyChanged();
+        }
+
+        /// <summary>
+        /// Deletes a tag definition and every reference to it — including an active filter, which
+        /// would otherwise keep filtering by a tag that no longer exists and silently empty the list.
+        /// </summary>
+        public void RemoveTag(BuildOrderTag tag)
+        {
+            if (m_Asset == null || tag == null)
+                return;
+
+            RecordUndo("Remove Tag");
+            m_Asset.m_Tags.Remove(tag);
+            _tagFilter.Remove(tag.m_Id);
+
+            for (int i = 0; i < m_Asset.m_Steps.Count; i++)
+                m_Asset.m_Steps[i].m_TagIds.Remove(tag.m_Id);
+
+            RaiseChanged();
         }
 
         #region Clipboard

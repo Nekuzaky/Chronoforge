@@ -158,22 +158,10 @@ namespace Chronoforge.Editor
             label.RegisterValueChangedCallback(evt => Commit(() => tag.m_Label = evt.newValue, "Edit Tag Label"));
             row.Add(label);
 
-            var remove = new Button(() =>
-            {
-                _context.RecordUndo("Remove Tag");
-                RemoveTagEverywhere(tag);
-                _context.NotifyChanged();
-            }) { text = "×" };
+            var remove = new Button(() => _context.RemoveTag(tag)) { text = "×" };
             remove.style.width = 22;
             row.Add(remove);
             return row;
-        }
-
-        private void RemoveTagEverywhere(BuildOrderTag tag)
-        {
-            _context.m_Asset.m_Tags.Remove(tag);
-            foreach (BuildOrderStep step in _context.m_Asset.m_Steps)
-                step.m_TagIds.Remove(tag.m_Id);
         }
         #endregion
 

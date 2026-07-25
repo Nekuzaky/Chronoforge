@@ -53,6 +53,7 @@ namespace Chronoforge.Overlay
         private BuildOrderEvaluationResult _evaluation = new();
         private float _time;
         private int _renderedIndex = int.MinValue;
+        private int _renderedSecond = int.MinValue;
         private bool _warnedAboutPanelSettings;
 
         /// <summary>Match time in seconds the overlay renders against. Never negative.</summary>
@@ -68,7 +69,7 @@ namespace Chronoforge.Overlay
         {
             m_BuildOrder = buildOrder;
             Reevaluate();
-            _renderedIndex = int.MinValue;
+            Invalidate();
             RefreshRows();
         }
 
@@ -87,7 +88,7 @@ namespace Chronoforge.Overlay
                 return;
 
             BuildTree(root);
-            _renderedIndex = int.MinValue;
+            Invalidate();
             RefreshRows();
         }
 
@@ -115,6 +116,13 @@ namespace Chronoforge.Overlay
 
         private void Reevaluate() =>
             _evaluation = m_BuildOrder != null ? BuildOrderEvaluation.Run(m_BuildOrder) : new BuildOrderEvaluationResult();
+
+        /// <summary>Forces the next refresh to redraw rows and clock, whatever their cached state.</summary>
+        private void Invalidate()
+        {
+            _renderedIndex = int.MinValue;
+            _renderedSecond = int.MinValue;
+        }
 
         /// <summary>
         /// Resolves the document root, warning once when PanelSettings are missing — without it
@@ -212,20 +220,34 @@ namespace Chronoforge.Overlay
         #endregion
 
         #region Refresh
+        /// <summary>
+        /// Rewrites the clock only when the displayed second actually changes. The label text is
+        /// built by string interpolation, so doing it every frame would allocate every frame for a
+        /// readout that only ticks once a second.
+        /// </summary>
         private void UpdateClock()
         {
+            int second = Mathf.FloorToInt(_time);
+            if (second == _renderedSecond)
+                return;
+
+            _renderedSecond = second;
             int supply = BuildOrderTimelineQuery.SupplyAt(_evaluation, _time);
             _clock.text = $"{BuildOrderTime.Format(_time)} / {BuildOrderTime.Format(_evaluation.m_TotalSeconds)}   ·   supply {supply}";
         }
 
         /// <summary>
         /// Repoints the fixed pool of row labels at the current window of steps. Rows are reused,
-        /// never recreated, so a long match allocates nothing here.
+        /// never recreated, so a long match allocates nothing here. Safe to call before the tree
+        /// exists — the host game may set a build order from its own Awake, and PanelSettings may
+        /// be missing entirely.
         /// </summary>
         private void RefreshRows()
         {
-            if (m_BuildOrder == null)
+            if (m_BuildOrder == null || _panel == null)
                 return;
+
+            _title.text = m_BuildOrder.m_Title;
 
             int current = BuildOrderTimelineQuery.IndexAt(_evaluation, _time);
             _renderedIndex = current;

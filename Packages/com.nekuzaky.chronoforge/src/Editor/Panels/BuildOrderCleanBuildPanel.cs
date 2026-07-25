@@ -52,13 +52,13 @@ namespace Chronoforge.Editor
 
             _body.Add(Summary());
             _body.Add(Check("Supply blocks", settings.m_CheckSupplyBlocks, v => settings.m_CheckSupplyBlocks = v));
-            _body.Add(Number("Starting supply cap", settings.m_StartingSupplyCap, v => settings.m_StartingSupplyCap = v));
+            _body.Add(IntRow("Starting supply cap", settings.m_StartingSupplyCap, v => settings.m_StartingSupplyCap = v));
             _body.Add(Check("Idle production", settings.m_CheckIdleProduction, v => settings.m_CheckIdleProduction = v));
-            _body.Add(Number("Max idle (s)", settings.m_MaxFacilityIdleSeconds, v => settings.m_MaxFacilityIdleSeconds = v));
+            _body.Add(FloatRow("Max idle (s)", settings.m_MaxFacilityIdleSeconds, v => settings.m_MaxFacilityIdleSeconds = v));
             _body.Add(Check("Worker gaps", settings.m_CheckWorkerGaps, v => settings.m_CheckWorkerGaps = v));
-            _body.Add(Number("Max worker gap (s)", settings.m_MaxWorkerGapSeconds, v => settings.m_MaxWorkerGapSeconds = v));
+            _body.Add(FloatRow("Max worker gap (s)", settings.m_MaxWorkerGapSeconds, v => settings.m_MaxWorkerGapSeconds = v));
             _body.Add(Check("Stockpiling", settings.m_CheckStockpiling, v => settings.m_CheckStockpiling = v));
-            _body.Add(Number("Stockpile threshold", settings.m_StockpileThreshold, v => settings.m_StockpileThreshold = v));
+            _body.Add(FloatRow("Stockpile threshold", settings.m_StockpileThreshold, v => settings.m_StockpileThreshold = v));
         }
 
         private Label Summary()
@@ -97,14 +97,14 @@ namespace Chronoforge.Editor
             return toggle;
         }
 
-        private IntegerField Number(string label, int value, Action<int> setter)
+        private IntegerField IntRow(string label, int value, Action<int> setter)
         {
             var field = new IntegerField(label) { value = value, isDelayed = true };
             field.RegisterValueChangedCallback(evt => Commit(() => setter(evt.newValue), $"Edit {label}"));
             return field;
         }
 
-        private FloatField Number(string label, float value, Action<float> setter)
+        private FloatField FloatRow(string label, float value, Action<float> setter)
         {
             var field = new FloatField(label) { value = value, isDelayed = true };
             field.RegisterValueChangedCallback(evt => Commit(() => setter(evt.newValue), $"Edit {label}"));
