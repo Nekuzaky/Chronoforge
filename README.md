@@ -32,6 +32,7 @@ baked into.
 | ⌨️ **Keyboard-first** | Add steps with `1`–`6`, duplicate with `Ctrl+D`, delete with `Del`, drag to reorder. |
 | 🎯 **Benchmarks** | Author timing/supply checkpoints ("Factory by 2:24 at 23 supply"); live pass/fail per checkpoint and markers over the timeline. |
 | ✅ **Live validation** | 12 rules — timing, supply, cost, prerequisites, branches, duplicates, incomplete data — surfaced without blocking editing. |
+| 🧹 **Clean-build analysis** | Opt-in execution-quality checks: supply blocks, idle production, resource stockpiling, worker gaps — the things a spreadsheet can't tell you. |
 | 📊 **Lightweight simulation** | Timeline, cumulative supply, and resource shortfall against an optional per-resource economy model. |
 | 🔀 **Conditional branches** | Named variation lanes gated by designer-authored conditions. |
 | 🏷️ **Tags & filtering** | Reusable labels and instant search over the step list. |
@@ -133,7 +134,12 @@ Packages/com.nekuzaky.chronoforge/
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the branch model, commit convention, and
 code style. In short: `feature/*` → PR into `develop` → release into `main`; runtime
-stays free of `UnityEditor`; public fields use `m_`, private use `_`.
+stays free of `UnityEditor`; public fields use `m_`, private use `_`; zero coroutines.
+
+The analysis layer follows the **NASA/JPL "Power of 10"** rules adapted to C#/Unity —
+bounded loops, no recursion, no allocation in hot paths, validated parameters, small
+functions. Each rule and how it's applied is documented in
+[`Documentation~/coding-standard.md`](Packages/com.nekuzaky.chronoforge/Documentation~/coding-standard.md).
 
 ## 📄 License
 

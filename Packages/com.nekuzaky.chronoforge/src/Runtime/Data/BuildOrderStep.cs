@@ -25,6 +25,20 @@ namespace Chronoforge
         public float m_EstimatedDuration;
         #endregion
 
+        #region Production model (optional — powers the clean-build analysis)
+        /// <summary>Supply cap this step adds (supply depot / overlord / pylon and the like).</summary>
+        public int m_SupplyProvided;
+
+        /// <summary>Set when this step creates a production facility; the id others produce from.</summary>
+        public string m_ProvidesFacilityId = "";
+
+        /// <summary>Set when this step is produced by a facility; must match a provider's id.</summary>
+        public string m_ProducedByFacilityId = "";
+
+        /// <summary>Marks worker/economy production, so gaps in it can be reported.</summary>
+        public bool m_IsWorker;
+        #endregion
+
         #region Economy & dependencies
         public BuildOrderResourceCost m_ResourceCost = new();
         public List<BuildOrderRequirement> m_Prerequisites = new();

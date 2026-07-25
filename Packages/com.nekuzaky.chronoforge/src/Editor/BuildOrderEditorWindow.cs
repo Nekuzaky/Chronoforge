@@ -25,6 +25,7 @@ namespace Chronoforge.Editor
         private BuildOrderStructurePanel _structurePanel;
         private BuildOrderComparePanel _comparePanel;
         private BuildOrderHistoryPanel _historyPanel;
+        private BuildOrderCleanBuildPanel _cleanBuildPanel;
         private Label _status;
 
         #region Entry points
@@ -129,6 +130,8 @@ namespace Chronoforge.Editor
             sideScroll.Add(_timelineView);
             _benchmarkPanel = new BuildOrderBenchmarkPanel(_context);
             sideScroll.Add(_benchmarkPanel);
+            _cleanBuildPanel = new BuildOrderCleanBuildPanel(_context);
+            sideScroll.Add(_cleanBuildPanel);
             _structurePanel = new BuildOrderStructurePanel(_context);
             sideScroll.Add(_structurePanel);
             _comparePanel = new BuildOrderComparePanel(_context);
@@ -167,6 +170,7 @@ namespace Chronoforge.Editor
             _validationPanel.Rebuild();
             _timelineView.Rebuild();
             _benchmarkPanel.Rebuild();
+            _cleanBuildPanel.Rebuild();
             _structurePanel.Rebuild();
             _comparePanel.Rebuild();
             _historyPanel.Rebuild();

@@ -7,6 +7,16 @@ All notable changes to Chronoforge are documented here. Format follows
 ## [Unreleased]
 
 ### Added
+- **Clean-build analysis** (`BuildOrderCleanBuildAnalyzer`) — execution-quality checks, not just
+  sequence validity: supply blocks, idle production facilities, resource stockpiling, and worker
+  production gaps. Opt-in per asset via `BuildOrderCleanBuildSettings` with tunable thresholds;
+  new per-step production data (supply provided, provides/produced-by facility id, is-worker).
+  Issues surface in the existing validation panel. Codes: `SupplyBlock`, `IdleProduction`,
+  `ResourceStockpiling`, `WorkerProductionGap`.
+- `Documentation~/coding-standard.md` — the analysis layer now follows the NASA/JPL
+  "Power of 10" rules (adapted to C#/Unity), documented rule by rule.
+
+### Added (previous pass)
 - **Snapshot restore & history** — `BuildOrderHistoryPanel` lists snapshots with restore
   (behind a confirm, undoable, history preserved) and delete. `RestoreSnapshot` re-attaches
   the current history after overwriting.

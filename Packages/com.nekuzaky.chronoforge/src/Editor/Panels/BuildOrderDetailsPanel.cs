@@ -39,6 +39,7 @@ namespace Chronoforge.Editor
 
             BuildIdentity(step);
             BuildTiming(step);
+            BuildProduction(step);
             BuildResourceCost(step);
             BuildPrerequisites(step);
             BuildTags(step);
@@ -91,6 +92,35 @@ namespace Chronoforge.Editor
             var duration = new FloatField("Est. duration (s)") { value = step.m_EstimatedDuration, isDelayed = true };
             duration.RegisterValueChangedCallback(evt => Commit(() => step.m_EstimatedDuration = evt.newValue, "Edit Duration"));
             _body.Add(duration);
+        }
+
+        /// <summary>
+        /// Optional production data. Only meaningful when the clean-build analysis is enabled, so
+        /// the section states that rather than silently doing nothing.
+        /// </summary>
+        private void BuildProduction(BuildOrderStep step)
+        {
+            AddSubHeader("Production");
+
+            var supplyProvided = new IntegerField("Supply provided") { value = step.m_SupplyProvided, isDelayed = true };
+            supplyProvided.tooltip = "Supply cap this step adds (depot / overlord / pylon).";
+            supplyProvided.RegisterValueChangedCallback(evt => Commit(() => step.m_SupplyProvided = evt.newValue, "Edit Supply Provided"));
+            _body.Add(supplyProvided);
+
+            var provides = new TextField("Provides facility") { value = step.m_ProvidesFacilityId, isDelayed = true };
+            provides.tooltip = "Id of the production facility this step creates.";
+            provides.RegisterValueChangedCallback(evt => Commit(() => step.m_ProvidesFacilityId = evt.newValue, "Edit Provides Facility"));
+            _body.Add(provides);
+
+            var producedBy = new TextField("Produced by") { value = step.m_ProducedByFacilityId, isDelayed = true };
+            producedBy.tooltip = "Id of the facility that produces this step.";
+            producedBy.RegisterValueChangedCallback(evt => Commit(() => step.m_ProducedByFacilityId = evt.newValue, "Edit Produced By"));
+            _body.Add(producedBy);
+
+            var isWorker = new Toggle("Is worker") { value = step.m_IsWorker };
+            isWorker.tooltip = "Counts toward worker-production continuity checks.";
+            isWorker.RegisterValueChangedCallback(evt => Commit(() => step.m_IsWorker = evt.newValue, "Toggle Is Worker"));
+            _body.Add(isWorker);
         }
 
         private void BuildResourceCost(BuildOrderStep step)

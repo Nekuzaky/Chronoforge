@@ -65,6 +65,10 @@ namespace Chronoforge
         SuspiciousOrder,
         ResourceShortfall,
         BenchmarkMissed,
+        SupplyBlock,
+        ResourceStockpiling,
+        IdleProduction,
+        WorkerProductionGap,
         IncompleteData
     }
 
