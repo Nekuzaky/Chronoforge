@@ -67,11 +67,11 @@ namespace Chronoforge.Editor
             head.style.flexDirection = FlexDirection.Row;
             head.style.alignItems = Align.Center;
 
-            bool passed = IsPassed(index, out bool hasResult);
+            bool hasResult = _context.m_Evaluation.TryGetBenchmarkResult(index, out BuildOrderBenchmarkResult result);
             var dot = new VisualElement();
             dot.AddToClassList("cf-benchmark__dot");
-            dot.EnableInClassList("cf-benchmark__dot--pass", hasResult && passed);
-            dot.EnableInClassList("cf-benchmark__dot--fail", hasResult && !passed);
+            dot.EnableInClassList("cf-benchmark__dot--pass", hasResult && result.m_Passed);
+            dot.EnableInClassList("cf-benchmark__dot--fail", hasResult && !result.m_Passed);
             head.Add(dot);
 
             var label = new TextField { value = benchmark.m_Label, isDelayed = true };
@@ -149,29 +149,8 @@ namespace Chronoforge.Editor
         }
 
         #region Status
-        private bool IsPassed(int index, out bool hasResult)
-        {
-            foreach (BuildOrderBenchmarkResult result in _context.m_Evaluation.m_BenchmarkResults)
-            {
-                if (result.m_BenchmarkIndex == index)
-                {
-                    hasResult = true;
-                    return result.m_Passed;
-                }
-            }
-            hasResult = false;
-            return true;
-        }
-
-        private string DetailFor(int index)
-        {
-            foreach (BuildOrderBenchmarkResult result in _context.m_Evaluation.m_BenchmarkResults)
-            {
-                if (result.m_BenchmarkIndex == index)
-                    return result.m_Detail;
-            }
-            return "";
-        }
+        private string DetailFor(int index) =>
+            _context.m_Evaluation.TryGetBenchmarkResult(index, out BuildOrderBenchmarkResult result) ? result.m_Detail : "";
         #endregion
 
         private void Commit(Action mutation, string undoName)

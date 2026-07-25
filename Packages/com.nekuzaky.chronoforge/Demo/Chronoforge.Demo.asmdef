@@ -2,7 +2,8 @@
     "name": "Chronoforge.Demo",
     "rootNamespace": "Chronoforge.Demo",
     "references": [
-        "Chronoforge.Runtime"
+        "Chronoforge.Runtime",
+        "Chronoforge.Overlay"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

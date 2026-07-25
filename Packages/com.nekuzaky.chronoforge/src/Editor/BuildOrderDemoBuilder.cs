@@ -1,8 +1,10 @@
 using Chronoforge.Demo;
+using Chronoforge.Overlay;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 namespace Chronoforge.Editor
 {
@@ -29,17 +31,25 @@ namespace Chronoforge.Editor
             Scene scene = EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects, NewSceneMode.Single);
 
             var host = new GameObject("Chronoforge Demo Player");
+            var document = host.AddComponent<UIDocument>();
+            var overlay = host.AddComponent<BuildOrderOverlay>();
             var player = host.AddComponent<BuildOrderDemoPlayer>();
-            player.m_BuildOrder = asset;
+
+            overlay.m_BuildOrder = asset;
+            overlay.m_UseInternalClock = false;
             player.m_AutoPlay = true;
+
+            bool configured = BuildOrderOverlaySetup.Configure(document, out string setupError);
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene, k_ScenePath);
 
-            EditorUtility.DisplayDialog(
-                "Chronoforge",
-                "Demo scene created at:\n" + k_ScenePath + "\n\nPress Play to watch the build order run, then open the asset to edit it in Chronoforge.",
-                "OK");
+            string message = "Demo scene created at:\n" + k_ScenePath +
+                             "\n\nPress Play to watch the build order run, then open the asset to edit it in Chronoforge.";
+            if (!configured)
+                message += "\n\nThe overlay still needs PanelSettings:\n" + setupError;
+
+            EditorUtility.DisplayDialog("Chronoforge", message, "OK");
             Selection.activeObject = asset;
         }
 

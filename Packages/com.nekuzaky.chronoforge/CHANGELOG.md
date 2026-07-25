@@ -6,7 +6,24 @@ All notable changes to Chronoforge are documented here. Format follows
 
 ## [Unreleased]
 
+### Changed
+- **Overlay rewritten in runtime UI Toolkit** (was `OnGUI`) — themed panel matching the editor
+  window, built once in C# with inline styles so it needs no USS/prefab/scene asset. Per-frame
+  work is one label update; step rows come from a fixed pool and are repointed only when the
+  current step changes (no per-frame allocation).
+- `BuildOrderDemoPlayer` is now a *driver* for the overlay rather than a second renderer,
+  demonstrating the intended host-game integration (owns the clock, pushes it in). Its transport
+  controls stay `OnGUI` — a development harness, not shipping UI.
+- **De-duplicated shared logic**: `BuildOrderColors` (runtime) is now the single source of the
+  visual identity for both editor and overlay; `BuildOrderTimelineQuery.IndexAt/SupplyAt` replaces
+  three copies of "which step is current"; `EvaluationResult.TryGetBenchmarkResult` replaces two
+  copies of the benchmark-status lookup.
+
 ### Added
+- `Chronoforge ▸ Create Overlay Setup` — creates the `PanelSettings` runtime UI Toolkit requires
+  and wires it, with a clear message when the project has no `ThemeStyleSheet` yet.
+- Demo scene now includes the overlay, wired end to end.
+- Tests for `BuildOrderTimelineQuery` and benchmark-result lookup.
 - **Clean-build analysis** (`BuildOrderCleanBuildAnalyzer`) — execution-quality checks, not just
   sequence validity: supply blocks, idle production facilities, resource stockpiling, and worker
   production gaps. Opt-in per asset via `BuildOrderCleanBuildSettings` with tunable thresholds;

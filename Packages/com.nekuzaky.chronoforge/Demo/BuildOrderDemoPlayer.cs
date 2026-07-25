@@ -1,124 +1,106 @@
+using Chronoforge.Overlay;
 using UnityEngine;
 
 namespace Chronoforge.Demo
 {
     /// <summary>
-    /// Plays a <see cref="BuildOrderAsset"/> back in Play mode: advances a clock, highlights the
-    /// current step, and draws a lightweight overlay to scrub/pause/adjust speed. Proves the
-    /// runtime layer (simulation) is usable at runtime — the seed of a future in-game overlay.
-    /// Update-driven; no coroutines.
+    /// Drives a <see cref="BuildOrderOverlay"/> the way a host game would: it owns the match clock
+    /// and pushes it into the overlay, which does all the rendering. Adds a small transport UI
+    /// (play / pause / restart / speed / scrub) so the demo is explorable.
+    /// <para>
+    /// The transport is deliberately drawn with <c>OnGUI</c>: it is a development harness, not
+    /// shipping UI, and this keeps the demo free of extra UI assets. The overlay itself — the part
+    /// a game would actually ship — is runtime UI Toolkit. Update-driven; no coroutines.
+    /// </para>
     /// </summary>
+    [RequireComponent(typeof(BuildOrderOverlay))]
     [AddComponentMenu("Chronoforge/Build Order Demo Player")]
     public sealed class BuildOrderDemoPlayer : MonoBehaviour
     {
-        public BuildOrderAsset m_BuildOrder;
         public bool m_AutoPlay = true;
         [Range(0.25f, 8f)] public float m_Speed = 2f;
+        public bool m_ShowTransport = true;
 
+        private BuildOrderOverlay _overlay;
         private BuildOrderEvaluationResult _evaluation = new();
-        private float _elapsed;
         private bool _playing;
-        private Vector2 _scroll;
-        private GUIStyle _richLabel;
+        private GUIStyle _label;
 
-        private void OnEnable() => Reload();
-
-        private void Reload()
+        private void OnEnable()
         {
-            _evaluation = m_BuildOrder != null ? BuildOrderEvaluation.Run(m_BuildOrder) : new BuildOrderEvaluationResult();
-            _elapsed = 0f;
-            _playing = m_AutoPlay && m_BuildOrder != null;
+            _overlay = GetComponent<BuildOrderOverlay>();
+
+            // The demo owns the clock, so make sure the overlay isn't also advancing it.
+            _overlay.m_UseInternalClock = false;
+            _overlay.ResetClock();
+
+            _evaluation = _overlay.m_BuildOrder != null
+                ? BuildOrderEvaluation.Run(_overlay.m_BuildOrder)
+                : new BuildOrderEvaluationResult();
+
+            _playing = m_AutoPlay && _overlay.m_BuildOrder != null;
         }
 
         private void Update()
         {
-            if (!_playing || m_BuildOrder == null)
+            if (!_playing)
                 return;
 
-            _elapsed += Time.deltaTime * m_Speed;
+            _overlay.Advance(Time.deltaTime * m_Speed);
+
             float total = _evaluation.m_TotalSeconds;
-            if (total > 0f && _elapsed >= total)
+            if (total > 0f && _overlay.CurrentTime >= total)
             {
-                _elapsed = total;
+                _overlay.CurrentTime = total;
                 _playing = false;
             }
         }
 
-        private int CurrentIndex()
-        {
-            int index = -1;
-            for (int i = 0; i < _evaluation.m_Timeline.Count; i++)
-            {
-                if (_evaluation.m_Timeline[i].m_StartSeconds <= _elapsed)
-                    index = i;
-                else
-                    break;
-            }
-            return index;
-        }
-
-        #region Overlay
+        #region Transport (development harness)
         private void OnGUI()
         {
-            if (m_BuildOrder == null)
+            if (!m_ShowTransport)
+                return;
+
+            EnsureStyles();
+
+            if (_overlay.m_BuildOrder == null)
             {
-                GUI.Box(new Rect(16, 16, 360, 60), "Chronoforge Demo\nAssign a Build Order asset to the player.");
+                GUI.Label(new Rect(16f, 16f, 420f, 22f), "Chronoforge demo: assign a Build Order to the overlay.", _label);
                 return;
             }
 
-            const float width = 380f;
-            GUILayout.BeginArea(new Rect(16, 16, width, Screen.height - 32), GUI.skin.box);
-
-            GUILayout.Label($"<b>{m_BuildOrder.m_Title}</b>", RichLabel());
-            GUILayout.Label($"{BuildOrderTime.Format(_elapsed)} / {BuildOrderTime.Format(_evaluation.m_TotalSeconds)}    ·    supply {ProjectedSupply()}");
-
-            DrawTransport();
-            GUILayout.Space(6);
-            DrawStepList(CurrentIndex());
-
+            GUILayout.BeginArea(new Rect(16f, Screen.height - 74f, 380f, 58f), GUI.skin.box);
+            DrawButtons();
+            DrawScrubber();
             GUILayout.EndArea();
         }
 
-        private void DrawTransport()
+        private void DrawButtons()
         {
             GUILayout.BeginHorizontal();
             if (GUILayout.Button(_playing ? "Pause" : "Play"))
                 _playing = !_playing;
             if (GUILayout.Button("Restart"))
             {
-                _elapsed = 0f;
+                _overlay.ResetClock();
                 _playing = true;
             }
-            GUILayout.Label("Speed", GUILayout.Width(44));
-            m_Speed = GUILayout.HorizontalSlider(m_Speed, 0.25f, 8f, GUILayout.Width(90));
-            GUILayout.Label($"{m_Speed:0.0}x", GUILayout.Width(34));
+            GUILayout.Label("Speed", _label, GUILayout.Width(42f));
+            m_Speed = GUILayout.HorizontalSlider(m_Speed, 0.25f, 8f, GUILayout.Width(90f));
+            GUILayout.Label($"{m_Speed:0.0}x", _label, GUILayout.Width(34f));
             GUILayout.EndHorizontal();
+        }
 
+        private void DrawScrubber()
+        {
             float total = Mathf.Max(1f, _evaluation.m_TotalSeconds);
-            _elapsed = GUILayout.HorizontalSlider(_elapsed, 0f, total);
+            float scrubbed = GUILayout.HorizontalSlider(_overlay.CurrentTime, 0f, total);
+            if (!Mathf.Approximately(scrubbed, _overlay.CurrentTime))
+                _overlay.CurrentTime = scrubbed;
         }
 
-        private void DrawStepList(int current)
-        {
-            _scroll = GUILayout.BeginScrollView(_scroll);
-            for (int i = 0; i < m_BuildOrder.m_Steps.Count; i++)
-            {
-                BuildOrderStep step = m_BuildOrder.m_Steps[i];
-                bool active = i == current;
-                string title = string.IsNullOrWhiteSpace(step.m_Title) ? $"({step.m_Type})" : step.m_Title;
-                string line = $"{step.m_Supply,3}  {step.DisplayTime,5}  {title}";
-                GUILayout.Label(active ? $"<b>▶ {line}</b>" : $"   {line}", RichLabel());
-            }
-            GUILayout.EndScrollView();
-        }
-
-        private int ProjectedSupply()
-        {
-            int index = CurrentIndex();
-            return index >= 0 ? _evaluation.m_Timeline[index].m_ProjectedSupply : 0;
-        }
-
-        private GUIStyle RichLabel() => _richLabel ??= new GUIStyle(GUI.skin.label) { richText = true };
+        private void EnsureStyles() => _label ??= new GUIStyle(GUI.skin.label) { fontSize = 11 };
         #endregion
     }
 }

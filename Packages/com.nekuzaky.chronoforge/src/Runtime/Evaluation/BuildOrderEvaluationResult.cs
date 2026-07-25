@@ -16,6 +16,25 @@ namespace Chronoforge
         public float m_TotalSeconds;
         public int m_FinalSupply;
 
+        /// <summary>
+        /// Looks up the outcome of the benchmark at <paramref name="benchmarkIndex"/>. Callers use
+        /// this instead of scanning the list themselves, so "no result yet" and "failed" stay
+        /// distinguishable.
+        /// </summary>
+        public bool TryGetBenchmarkResult(int benchmarkIndex, out BuildOrderBenchmarkResult result)
+        {
+            for (int i = 0; i < m_BenchmarkResults.Count; i++)
+            {
+                if (m_BenchmarkResults[i].m_BenchmarkIndex == benchmarkIndex)
+                {
+                    result = m_BenchmarkResults[i];
+                    return true;
+                }
+            }
+            result = null;
+            return false;
+        }
+
         public int ErrorCount => CountBySeverity(BuildOrderIssueSeverity.Error);
         public int WarningCount => CountBySeverity(BuildOrderIssueSeverity.Warning);
         public bool IsValid => ErrorCount == 0;

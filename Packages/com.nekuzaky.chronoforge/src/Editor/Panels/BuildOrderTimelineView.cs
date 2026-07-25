@@ -85,9 +85,8 @@ namespace Chronoforge.Editor
                 var marker = new VisualElement();
                 marker.AddToClassList("cf-timeline__marker");
 
-                bool passed = ResultPassed(i, out bool hasResult);
-                if (hasResult)
-                    marker.EnableInClassList(passed ? "cf-timeline__marker--pass" : "cf-timeline__marker--fail", enable: true);
+                if (_context.m_Evaluation.TryGetBenchmarkResult(i, out BuildOrderBenchmarkResult result))
+                    marker.EnableInClassList(result.m_Passed ? "cf-timeline__marker--pass" : "cf-timeline__marker--fail", enable: true);
 
                 float leftPercent = Mathf.Clamp(benchmark.m_AnchorTimeSeconds / total * 100f, 0f, 100f);
                 marker.style.left = Length.Percent(leftPercent);
@@ -96,18 +95,5 @@ namespace Chronoforge.Editor
             }
         }
 
-        private bool ResultPassed(int index, out bool hasResult)
-        {
-            foreach (BuildOrderBenchmarkResult result in _context.m_Evaluation.m_BenchmarkResults)
-            {
-                if (result.m_BenchmarkIndex == index)
-                {
-                    hasResult = true;
-                    return result.m_Passed;
-                }
-            }
-            hasResult = false;
-            return true;
-        }
     }
 }

@@ -3,7 +3,8 @@
     "rootNamespace": "Chronoforge.Editor",
     "references": [
         "Chronoforge.Runtime",
-        "Chronoforge.Demo"
+        "Chronoforge.Demo",
+        "Chronoforge.Overlay"
     ],
     "includePlatforms": [
         "Editor"
