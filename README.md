@@ -36,7 +36,7 @@ baked into.
 | 🧹 **Clean-build analysis** | Opt-in execution-quality checks: supply blocks, idle production, resource stockpiling, worker gaps — the things a spreadsheet can't tell you. |
 | 📊 **Lightweight simulation** | Timeline, cumulative supply, and resource shortfall against an optional per-resource economy model. |
 | 🔀 **Conditional branches** | Named variation lanes gated by designer-authored conditions. |
-| 🏷️ **Tags & filtering** | Reusable labels and instant search over the step list. |
+| 🏷️ **Tags & filtering** | Reusable coloured labels, toggle-chip filtering by tag, and instant text search over the step list. |
 | 💾 **Import / export** | Schema-versioned JSON round-trip + a readable text share format. |
 | 🕓 **Snapshots** | Capture state for history and planned-vs-actual comparison. |
 | 🧩 **11 native step types** | Unit, Building, Upgrade, Economy, Scout, Attack, Expand, Tech, Defense, Note, Custom. |

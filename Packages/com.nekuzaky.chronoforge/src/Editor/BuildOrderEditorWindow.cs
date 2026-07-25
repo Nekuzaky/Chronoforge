@@ -17,6 +17,7 @@ namespace Chronoforge.Editor
 
         private readonly BuildOrderEditorContext _context = new();
 
+        private BuildOrderSearchBar _searchBar;
         private BuildOrderListView _listView;
         private BuildOrderDetailsPanel _detailsPanel;
         private BuildOrderValidationPanel _validationPanel;
@@ -109,7 +110,8 @@ namespace Chronoforge.Editor
             var listColumn = new VisualElement();
             listColumn.AddToClassList("cf-column");
             listColumn.AddToClassList("cf-column--list");
-            listColumn.Add(new BuildOrderSearchBar(_context));
+            _searchBar = new BuildOrderSearchBar(_context);
+            listColumn.Add(_searchBar);
             _listView = new BuildOrderListView(_context);
             listColumn.Add(_listView);
 
@@ -168,6 +170,7 @@ namespace Chronoforge.Editor
             if (_listView == null)
                 return;
 
+            _searchBar.Rebuild();
             _listView.Refresh();
             _detailsPanel.Rebuild();
             _validationPanel.Rebuild();
@@ -196,9 +199,14 @@ namespace Chronoforge.Editor
             }
 
             BuildOrderEvaluationResult evaluation = _context.m_Evaluation;
+            int total = _context.m_Asset.m_Steps.Count;
+            string steps = _context.HasFilter
+                ? $"{_context.GetVisibleSteps().Count} of {total} steps shown"
+                : $"{total} steps";
+
             _status.text =
-                $"{_context.m_Asset.m_Steps.Count} steps   ·   " +
-                $"{BuildOrderTime.Format(evaluation.m_TotalSeconds)} total   ·   " +
+                $"{steps}   ·   " +
+                $"{BuildOrderTime.Format(evaluation.m_TotalSeconds)}   ·   " +
                 $"supply {evaluation.m_FinalSupply}   ·   " +
                 $"{evaluation.ErrorCount} errors, {evaluation.WarningCount} warnings";
         }

@@ -27,6 +27,9 @@ namespace Chronoforge.Editor
 
         /// <summary>Selected step ids in click order; the last one is the primary (edited) step.</summary>
         private readonly List<string> _selectedIds = new();
+
+        /// <summary>Tag ids the list is filtered to. Empty means "no tag filter".</summary>
+        private readonly List<string> _tagFilter = new();
         private string _search = "";
         #endregion
 
@@ -43,7 +46,32 @@ namespace Chronoforge.Editor
             }
         }
 
-        public bool HasFilter => !string.IsNullOrEmpty(_search);
+        public bool HasFilter => !string.IsNullOrEmpty(_search) || _tagFilter.Count > 0;
+
+        public bool IsTagFiltered(string tagId) => _tagFilter.Contains(tagId);
+
+        public int TagFilterCount => _tagFilter.Count;
+
+        /// <summary>Adds or removes a tag from the filter. Steps match when they carry any active tag.</summary>
+        public void ToggleTagFilter(string tagId)
+        {
+            if (string.IsNullOrEmpty(tagId))
+                return;
+
+            if (!_tagFilter.Remove(tagId))
+                _tagFilter.Add(tagId);
+            RaiseChanged();
+        }
+
+        public void ClearFilters()
+        {
+            if (!HasFilter)
+                return;
+
+            _tagFilter.Clear();
+            _search = "";
+            RaiseChanged();
+        }
 
         /// <summary>The step the details panel edits — the most recently selected one.</summary>
         public BuildOrderStep SelectedStep
@@ -132,7 +160,7 @@ namespace Chronoforge.Editor
             var filtered = new List<BuildOrderStep>();
             foreach (BuildOrderStep step in m_Asset.m_Steps)
             {
-                if (MatchesFilter(step, needle))
+                if (MatchesText(step, needle) && MatchesTags(step))
                     filtered.Add(step);
             }
             return filtered;
@@ -465,10 +493,29 @@ namespace Chronoforge.Editor
             }
         }
 
-        private static bool MatchesFilter(BuildOrderStep step, string needle) =>
-            step.m_Title.ToLowerInvariant().Contains(needle) ||
-            step.m_Type.ToString().ToLowerInvariant().Contains(needle) ||
-            step.m_DesignerNotes.ToLowerInvariant().Contains(needle);
+        private static bool MatchesText(BuildOrderStep step, string needle)
+        {
+            if (string.IsNullOrEmpty(needle))
+                return true;
+
+            return step.m_Title.ToLowerInvariant().Contains(needle) ||
+                   step.m_Type.ToString().ToLowerInvariant().Contains(needle) ||
+                   step.m_DesignerNotes.ToLowerInvariant().Contains(needle);
+        }
+
+        /// <summary>True when no tag filter is set, or the step carries at least one active tag.</summary>
+        private bool MatchesTags(BuildOrderStep step)
+        {
+            if (_tagFilter.Count == 0)
+                return true;
+
+            for (int i = 0; i < _tagFilter.Count; i++)
+            {
+                if (step.m_TagIds.Contains(_tagFilter[i]))
+                    return true;
+            }
+            return false;
+        }
         #endregion
     }
 }

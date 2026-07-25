@@ -15,6 +15,9 @@ All notable changes to Chronoforge are documented here. Format follows
 - **Templates** (`BuildOrderTemplatePanel`) — flag any build order as a template; append or replace
   from it in one click. Branches a template references come along so it validates immediately.
 - Keyboard navigation: `↑`/`↓` move the selection.
+- **Tag filtering** — the filter bar now shows a toggle chip per tag, tinted with the tag's own
+  colour, combining as "any of" alongside the text search. A Clear affordance appears only while
+  something is filtered, and the status bar reports "N of M steps shown".
 
 ### Fixed
 - `BuildOrderStep.Clone()` shallow-copied nested cost and prerequisite entries, so a duplicated

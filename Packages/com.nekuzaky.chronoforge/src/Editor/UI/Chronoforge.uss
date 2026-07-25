@@ -116,6 +116,33 @@
 
 .cf-searchbar > .unity-base-field { flex-grow: 1; }
 
+.cf-tagfilter {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 4px 6px 5px 6px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(20, 21, 24);
+}
+
+.cf-chip--tag {
+    height: 18px;
+    font-size: 10px;
+    margin-bottom: 3px;
+}
+
+.cf-chip--clear {
+    height: 18px;
+    font-size: 10px;
+    margin-bottom: 3px;
+    background-color: rgba(0, 0, 0, 0);
+    color: rgb(150, 158, 168);
+}
+
+.cf-chip--clear:hover {
+    background-color: rgb(52, 56, 62);
+    color: rgb(214, 219, 226);
+}
+
 /* ---- List rows ---- */
 .cf-row {
     flex-direction: row;
