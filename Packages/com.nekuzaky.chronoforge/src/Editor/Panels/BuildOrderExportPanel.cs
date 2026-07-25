@@ -112,7 +112,7 @@ namespace Chronoforge.Editor
                 m_Label = $"Snapshot {asset.m_Snapshots.Count + 1}",
                 m_TimestampUtc = DateTime.UtcNow.ToString("O"),
                 m_Author = asset.m_Author,
-                m_Json = BuildOrderSerializer.ExportJson(asset)
+                m_Json = BuildOrderSerializer.ExportJson(asset, includeHistory: false)
             });
             _context.NotifyChanged();
         }

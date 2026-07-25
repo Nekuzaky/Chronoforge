@@ -81,7 +81,9 @@ namespace Chronoforge
 
         private static BuildOrderActionType ParseType(string text)
         {
+            // Guard against Enum.TryParse mapping a numeric string ("3") onto an enum by value.
             if (!string.IsNullOrWhiteSpace(text) &&
+                !int.TryParse(text.Trim(), out _) &&
                 Enum.TryParse(text.Trim(), ignoreCase: true, out BuildOrderActionType type))
                 return type;
             return BuildOrderActionType.Custom;
