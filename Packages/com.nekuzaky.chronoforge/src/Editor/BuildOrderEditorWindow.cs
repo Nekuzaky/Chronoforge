@@ -26,6 +26,7 @@ namespace Chronoforge.Editor
         private BuildOrderComparePanel _comparePanel;
         private BuildOrderHistoryPanel _historyPanel;
         private BuildOrderCleanBuildPanel _cleanBuildPanel;
+        private BuildOrderTemplatePanel _templatePanel;
         private Label _status;
 
         #region Entry points
@@ -136,6 +137,8 @@ namespace Chronoforge.Editor
             sideScroll.Add(_structurePanel);
             _comparePanel = new BuildOrderComparePanel(_context);
             sideScroll.Add(_comparePanel);
+            _templatePanel = new BuildOrderTemplatePanel(_context);
+            sideScroll.Add(_templatePanel);
             _historyPanel = new BuildOrderHistoryPanel(_context);
             sideScroll.Add(_historyPanel);
             _validationPanel = new BuildOrderValidationPanel(_context);
@@ -173,6 +176,7 @@ namespace Chronoforge.Editor
             _cleanBuildPanel.Rebuild();
             _structurePanel.Rebuild();
             _comparePanel.Rebuild();
+            _templatePanel.Rebuild();
             _historyPanel.Rebuild();
             UpdateStatus();
         }
@@ -212,16 +216,58 @@ namespace Chronoforge.Editor
                 return;
             }
 
-            if (evt.keyCode == KeyCode.Delete)
+            bool command = evt.ctrlKey || evt.commandKey;
+
+            switch (evt.keyCode)
             {
-                _context.RemoveSelected();
-                evt.StopPropagation();
+                case KeyCode.Delete:
+                    _context.RemoveSelected();
+                    evt.StopPropagation();
+                    return;
+                case KeyCode.UpArrow:
+                    _context.MoveSelection(-1);
+                    evt.StopPropagation();
+                    return;
+                case KeyCode.DownArrow:
+                    _context.MoveSelection(1);
+                    evt.StopPropagation();
+                    return;
             }
-            else if (evt.ctrlKey && evt.keyCode == KeyCode.D)
+
+            if (!command)
+                return;
+
+            switch (evt.keyCode)
             {
-                _context.DuplicateSelected();
-                evt.StopPropagation();
+                case KeyCode.D:
+                    _context.DuplicateSelected();
+                    evt.StopPropagation();
+                    break;
+                case KeyCode.C:
+                    Report(_context.CopySelection(), "Copied");
+                    evt.StopPropagation();
+                    break;
+                case KeyCode.X:
+                    Report(_context.CutSelection(), "Cut");
+                    evt.StopPropagation();
+                    break;
+                case KeyCode.V:
+                    Paste();
+                    evt.StopPropagation();
+                    break;
             }
+        }
+
+        private void Paste()
+        {
+            if (!_context.PasteAfterSelection(out string error))
+                ShowNotification(new GUIContent(error));
+        }
+
+        private void Report(int count, string verb)
+        {
+            if (count > 0)
+                ShowNotification(new GUIContent($"{verb} {count} step{(count == 1 ? "" : "s")}"));
         }
 
         private bool TryQuickAddKey(KeyCode keyCode)

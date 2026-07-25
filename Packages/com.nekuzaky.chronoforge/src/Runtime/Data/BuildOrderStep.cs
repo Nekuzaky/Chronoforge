@@ -72,12 +72,37 @@ namespace Chronoforge
             m_Type = type
         };
 
+        /// <summary>
+        /// Deep copy with a fresh id. Nested cost and prerequisite entries are cloned too —
+        /// copying only the lists would leave the copy's costs aliased to the original's, so
+        /// editing a duplicated step would silently change the step it came from.
+        /// </summary>
         public BuildOrderStep Clone()
         {
             var clone = (BuildOrderStep)MemberwiseClone();
             clone.m_Id = Guid.NewGuid().ToString("N");
-            clone.m_ResourceCost = new BuildOrderResourceCost { m_Amounts = new List<BuildOrderResourceAmount>(m_ResourceCost.m_Amounts) };
-            clone.m_Prerequisites = new List<BuildOrderRequirement>(m_Prerequisites);
+
+            clone.m_ResourceCost = new BuildOrderResourceCost();
+            for (int i = 0; i < m_ResourceCost.m_Amounts.Count; i++)
+            {
+                BuildOrderResourceAmount amount = m_ResourceCost.m_Amounts[i];
+                clone.m_ResourceCost.m_Amounts.Add(new BuildOrderResourceAmount(amount.m_ResourceId, amount.m_Amount));
+            }
+
+            clone.m_Prerequisites = new List<BuildOrderRequirement>(m_Prerequisites.Count);
+            for (int i = 0; i < m_Prerequisites.Count; i++)
+            {
+                BuildOrderRequirement source = m_Prerequisites[i];
+                clone.m_Prerequisites.Add(new BuildOrderRequirement
+                {
+                    m_Type = source.m_Type,
+                    m_TargetId = source.m_TargetId,
+                    m_Label = source.m_Label,
+                    m_Amount = source.m_Amount,
+                    m_Optional = source.m_Optional
+                });
+            }
+
             clone.m_TagIds = new List<string>(m_TagIds);
             return clone;
         }

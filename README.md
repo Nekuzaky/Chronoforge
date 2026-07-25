@@ -29,7 +29,8 @@ baked into.
 | | |
 | --- | --- |
 | 🗂️ **Three-column workspace** | Step list · step details · timeline + validation, all live. |
-| ⌨️ **Keyboard-first** | Add steps with `1`–`6`, duplicate with `Ctrl+D`, delete with `Del`, drag to reorder. |
+| ⌨️ **Keyboard-first** | Insert steps with `1`–`6`, navigate with arrows, multi-select, copy/cut/paste **across assets**, duplicate, delete — all without leaving the keyboard. |
+| 🧩 **Templates** | Flag any build order as a template, then append or replace from it in one click. |
 | 🎯 **Benchmarks** | Author timing/supply checkpoints ("Factory by 2:24 at 23 supply"); live pass/fail per checkpoint and markers over the timeline. |
 | ✅ **Live validation** | 12 rules — timing, supply, cost, prerequisites, branches, duplicates, incomplete data — surfaced without blocking editing. |
 | 🧹 **Clean-build analysis** | Opt-in execution-quality checks: supply blocks, idle production, resource stockpiling, worker gaps — the things a spreadsheet can't tell you. |
@@ -71,9 +72,12 @@ order and a scene; press Play to watch it play back with a scrub/speed overlay.
 
 | Key | Action |
 | --- | --- |
-| `1` – `6` | Add Unit / Building / Upgrade / Economy / Tech / Note |
-| `Ctrl` + `D` | Duplicate selected step |
-| `Del` | Delete selected step |
+| `1` – `6` | Insert Unit / Building / Upgrade / Economy / Tech / Note after the selection |
+| `↑` `↓` | Move the selection |
+| `Ctrl` + `C` / `X` / `V` | Copy / cut / paste steps — works across assets and sessions |
+| `Ctrl` + `D` | Duplicate selection |
+| `Del` | Delete selection |
+| Click + `Shift` / `Ctrl` | Multi-select steps |
 | Drag | Reorder steps (when no filter is active) |
 
 ## 🏗️ Architecture

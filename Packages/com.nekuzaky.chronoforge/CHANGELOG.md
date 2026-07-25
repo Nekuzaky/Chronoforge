@@ -6,7 +6,24 @@ All notable changes to Chronoforge are documented here. Format follows
 
 ## [Unreleased]
 
+### Added
+- **Multi-selection** in the step list (`Shift`/`Ctrl` click). Copy, duplicate and delete act on
+  the whole selection; the details panel edits the primary step and says so.
+- **Copy / cut / paste steps** (`Ctrl+C` / `X` / `V`) via `BuildOrderStepClipboard` — serialized
+  through the system clipboard, so it works **across assets and across Unity sessions**. Pasted
+  steps always get fresh ids; foreign clipboard text is rejected rather than mangled.
+- **Templates** (`BuildOrderTemplatePanel`) — flag any build order as a template; append or replace
+  from it in one click. Branches a template references come along so it validates immediately.
+- Keyboard navigation: `↑`/`↓` move the selection.
+
+### Fixed
+- `BuildOrderStep.Clone()` shallow-copied nested cost and prerequisite entries, so a duplicated
+  step shared them with the original — editing the copy's cost silently changed the source. Now a
+  true deep copy, with tests for each nested collection.
+
 ### Changed
+- Quick-add now **inserts after the selection** (inheriting supply/time/branch from the step it
+  follows) instead of always appending — the next step belongs where you are working.
 - **Overlay rewritten in runtime UI Toolkit** (was `OnGUI`) — themed panel matching the editor
   window, built once in C# with inline styles so it needs no USS/prefab/scene asset. Per-frame
   work is one label update; step rows come from a fixed pool and are repointed only when the

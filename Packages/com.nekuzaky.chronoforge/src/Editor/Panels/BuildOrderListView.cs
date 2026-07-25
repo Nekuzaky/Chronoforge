@@ -23,7 +23,7 @@ namespace Chronoforge.Editor
             _list = new ListView
             {
                 fixedItemHeight = 26,
-                selectionType = SelectionType.Single,
+                selectionType = SelectionType.Multiple,
                 showBorder = false,
                 makeItem = MakeRow,
                 bindItem = BindRow
@@ -48,9 +48,17 @@ namespace Chronoforge.Editor
 
         public void SyncSelectionFromContext()
         {
-            int index = _source.IndexOf(_context.SelectedStep);
-            if (index >= 0)
-                _list.SetSelectionWithoutNotify(new[] { index });
+            List<BuildOrderStep> selected = _context.GetSelectedSteps();
+            var indices = new List<int>(selected.Count);
+            for (int i = 0; i < selected.Count; i++)
+            {
+                int index = _source.IndexOf(selected[i]);
+                if (index >= 0)
+                    indices.Add(index);
+            }
+
+            if (indices.Count > 0)
+                _list.SetSelectionWithoutNotify(indices);
         }
 
         #region Row rendering
@@ -102,14 +110,13 @@ namespace Chronoforge.Editor
         #region Interaction
         private void OnSelectionChanged(IEnumerable<object> selection)
         {
+            var ids = new List<string>();
             foreach (object item in selection)
             {
                 if (item is BuildOrderStep step)
-                {
-                    _context.Select(step.m_Id);
-                    return;
-                }
+                    ids.Add(step.m_Id);
             }
+            _context.SetSelection(ids);
         }
 
         private void OnItemIndexChanged(int from, int to)

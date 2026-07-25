@@ -37,6 +37,9 @@ namespace Chronoforge.Editor
                 return;
             }
 
+            if (_context.SelectionCount > 1)
+                BuildMultiSelectionNotice();
+
             BuildIdentity(step);
             BuildTiming(step);
             BuildProduction(step);
@@ -47,6 +50,19 @@ namespace Chronoforge.Editor
         }
 
         #region Sections
+        /// <summary>
+        /// States plainly that edits apply to the primary step only, so a multi-selection made for
+        /// copy/delete can't be mistaken for a bulk-edit surface.
+        /// </summary>
+        private void BuildMultiSelectionNotice()
+        {
+            var notice = new Label($"{_context.SelectionCount} steps selected — editing the last one. Copy, duplicate and delete apply to all.");
+            notice.AddToClassList("cf-benchmark__detail");
+            notice.style.whiteSpace = WhiteSpace.Normal;
+            notice.style.marginBottom = 4;
+            _body.Add(notice);
+        }
+
         private void BuildIdentity(BuildOrderStep step)
         {
             AddSubHeader("Identity");
