@@ -7,6 +7,17 @@ All notable changes to Chronoforge are documented here. Format follows
 ## [Unreleased]
 
 ### Added
+- **Snapshot restore & history** — `BuildOrderHistoryPanel` lists snapshots with restore
+  (behind a confirm, undoable, history preserved) and delete. `RestoreSnapshot` re-attaches
+  the current history after overwriting.
+- **Companion overlay** — `BuildOrderOverlay` (`Chronoforge.Overlay`): an in-game HUD driven
+  by the host game's clock (`CurrentTime`/`Advance`) that highlights the current step, previews
+  upcoming ones, and warns when a due benchmark is missed. Update/OnGUI only, no scene assets.
+- **Edit-mode test suite** (`Chronoforge.Tests`) — NUnit coverage for time parsing, validator
+  rules, simulation, benchmarks, comparison, CSV import, and JSON round-trip / snapshot-history
+  exclusion / schema gating.
+
+### Added (earlier)
 - **Benchmarks** — user-defined checkpoints (`BuildOrderBenchmark`) that the evaluator
   compares against the simulated timeline, flagging supply/timing slippage. Research-backed
   (Liquipedia timings & benchmarks). Generic; no game-specific metric hardcoded.

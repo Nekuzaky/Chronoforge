@@ -89,8 +89,12 @@ Packages/com.nekuzaky.chronoforge/
 │   │   ├── Evaluation/   Validator, Simulator, results & issues
 │   │   └── Serialization/ schema-versioned JSON + text
 │   └── Editor/           Chronoforge.Editor  (UI Toolkit)
-│       ├── Panels/       list, details, timeline, validation, export, quick-add
+│       ├── Panels/       list, details, timeline, benchmarks, structure,
+│       │                 compare, history, validation, export, quick-add
 │       └── UI/           USS theme + palette
+├── Overlay/              Chronoforge.Overlay — in-game companion HUD
+├── Demo/                 Chronoforge.Demo — playable demo player
+├── Tests/                Chronoforge.Tests — edit-mode NUnit suite
 ├── Samples~/             JSON starter templates
 └── Documentation~/
 ```
@@ -121,9 +125,9 @@ Packages/com.nekuzaky.chronoforge/
 - [x] Full branch / tag / prerequisite editors
 - [x] Planned-vs-actual comparison (diff against snapshots)
 - [x] CSV import (spreadsheet migration)
-- [ ] Snapshot restore from history
-- [ ] Edit-mode test suite
-- [ ] In-game overlay companion
+- [x] Snapshot restore from history
+- [x] Edit-mode test suite
+- [x] In-game overlay companion
 
 ## 🤝 Contributing
 

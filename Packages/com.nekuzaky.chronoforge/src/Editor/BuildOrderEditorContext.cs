@@ -186,6 +186,37 @@ namespace Chronoforge.Editor
             NotifyChanged();
         }
 
+        /// <summary>
+        /// Overwrites the build order from a snapshot while keeping the current history intact —
+        /// the snapshot payload is stored without its own history, so it must be re-attached.
+        /// Returns false with an error when the payload is unreadable.
+        /// </summary>
+        public bool RestoreSnapshot(BuildOrderSnapshot snapshot, out string error)
+        {
+            error = "";
+            if (m_Asset == null || snapshot == null)
+                return false;
+
+            RecordUndo("Restore Snapshot");
+            var preservedHistory = new List<BuildOrderSnapshot>(m_Asset.m_Snapshots);
+            if (!BuildOrderSerializer.ImportJson(snapshot.m_Json, m_Asset, out error))
+                return false;
+
+            m_Asset.m_Snapshots = preservedHistory;
+            Load(m_Asset);
+            return true;
+        }
+
+        public void DeleteSnapshot(BuildOrderSnapshot snapshot)
+        {
+            if (m_Asset == null || snapshot == null)
+                return;
+
+            RecordUndo("Delete Snapshot");
+            m_Asset.m_Snapshots.Remove(snapshot);
+            NotifyChanged();
+        }
+
         public void RecordUndo(string name)
         {
             if (m_Asset != null)
