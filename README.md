@@ -63,6 +63,9 @@ lives at `Packages/com.nekuzaky.chronoforge/`. No external dependencies.
    and watch validation and the timeline update live.
 4. Export to JSON or text to share — or import an existing JSON build order.
 
+**Want to see it running?** `Chronoforge ▸ Create Demo Scene` builds a sample build
+order and a scene; press Play to watch it play back with a scrub/speed overlay.
+
 ### Keyboard shortcuts
 
 | Key | Action |

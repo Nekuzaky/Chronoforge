@@ -29,6 +29,16 @@ All notable changes to Chronoforge are documented here. Format follows
 - `Documentation~/design-notes.md` — research synthesis (GDC tools talks, RTS benchmark
   theory, data-driven studios) mapping findings to product decisions.
 
+- **Demo scene** — `Chronoforge ▸ Create Demo Scene` generates a sample build order
+  asset and a scene wired to a `BuildOrderDemoPlayer` that plays the build order in Play
+  mode (Update-driven overlay: play/pause/restart/speed/scrub, current-step highlight).
+  Built programmatically so the scene/asset are always valid.
+
+### Fixed
+- Snapshots no longer embed their own history — `ExportJson(includeHistory:false)` used
+  for snapshot payloads (was exponential blob growth).
+- CSV `type` cells that are bare numbers no longer map onto an enum by value.
+
 ### Changed
 - Schema bumped to v2 (adds `m_Benchmarks`). v1 payloads still import cleanly.
 

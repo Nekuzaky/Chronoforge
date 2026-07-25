@@ -1,13 +1,10 @@
 {
-    "name": "Chronoforge.Editor",
-    "rootNamespace": "Chronoforge.Editor",
+    "name": "Chronoforge.Demo",
+    "rootNamespace": "Chronoforge.Demo",
     "references": [
-        "Chronoforge.Runtime",
-        "Chronoforge.Demo"
+        "Chronoforge.Runtime"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
