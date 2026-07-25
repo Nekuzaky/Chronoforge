@@ -17,6 +17,15 @@ All notable changes to Chronoforge are documented here. Format follows
   markers drawn over the timeline (green pass / amber miss).
 - Side column is now scrollable to host timeline, benchmarks, validation and export.
 - Text/numeric fields commit on Enter/blur (`isDelayed`) — no focus loss while typing.
+- **CSV import** (`BuildOrderCsvImporter`) — spreadsheet migration path. Auto-detects
+  delimiter (comma/semicolon/tab), optional header mapping, quoted fields; replace or
+  append. Surfaced in the export panel.
+- **Branches & tags authoring** (`BuildOrderStructurePanel`) — create/edit/remove branches
+  (key, name, colour, gating condition) and tag definitions; per-step prerequisites editor
+  and tag chips added to the details panel.
+- **Planned-vs-actual comparison** (`BuildOrderComparer` + `BuildOrderComparePanel`) — diff
+  the current build against any snapshot; added / removed / time / supply / type shifts,
+  click a row to jump to the step.
 - `Documentation~/design-notes.md` — research synthesis (GDC tools talks, RTS benchmark
   theory, data-driven studios) mapping findings to product decisions.
 

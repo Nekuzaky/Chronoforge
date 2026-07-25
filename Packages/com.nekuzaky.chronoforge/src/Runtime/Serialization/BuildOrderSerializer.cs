@@ -27,6 +27,20 @@ namespace Chronoforge
         }
 
         /// <summary>
+        /// Builds a fresh detached asset from JSON — used to rehydrate snapshots for comparison.
+        /// Returns null on failure. The caller owns the instance (destroy it when done).
+        /// </summary>
+        public static BuildOrderAsset CreateFromJson(string json, out string error)
+        {
+            var asset = ScriptableObject.CreateInstance<BuildOrderAsset>();
+            if (ImportJson(json, asset, out error))
+                return asset;
+
+            Object.DestroyImmediate(asset);
+            return null;
+        }
+
+        /// <summary>
         /// Overwrites <paramref name="target"/> from JSON. Returns false and leaves the target
         /// untouched when the payload is unreadable or from an unsupported future schema.
         /// </summary>

@@ -40,6 +40,8 @@ namespace Chronoforge.Editor
             BuildIdentity(step);
             BuildTiming(step);
             BuildResourceCost(step);
+            BuildPrerequisites(step);
+            BuildTags(step);
             BuildOrganisation(step);
         }
 
@@ -142,6 +144,142 @@ namespace Chronoforge.Editor
             }) { text = "+ Resource" };
             add.AddToClassList("cf-chip");
             container.Add(add);
+        }
+
+        private void BuildPrerequisites(BuildOrderStep step)
+        {
+            AddSubHeader("Prerequisites");
+            var container = new VisualElement();
+            _body.Add(container);
+            RebuildPrerequisiteRows(step, container);
+        }
+
+        private void RebuildPrerequisiteRows(BuildOrderStep step, VisualElement container)
+        {
+            container.Clear();
+            List<BuildOrderRequirement> prerequisites = step.m_Prerequisites;
+
+            foreach (BuildOrderRequirement requirement in prerequisites)
+            {
+                var row = new VisualElement();
+                row.AddToClassList("cf-field-row");
+
+                var type = new EnumField(requirement.m_Type);
+                type.style.width = 84;
+                type.RegisterValueChangedCallback(evt =>
+                {
+                    _context.RecordUndo("Edit Prerequisite Type");
+                    requirement.m_Type = (BuildOrderRequirementType)evt.newValue;
+                    _context.NotifyChanged();
+                    RebuildPrerequisiteRows(step, container);
+                });
+                row.Add(type);
+
+                row.Add(BuildPrerequisiteTarget(step, requirement));
+
+                var optional = new Toggle { value = requirement.m_Optional, tooltip = "Optional" };
+                optional.RegisterValueChangedCallback(evt => Commit(() => requirement.m_Optional = evt.newValue, "Toggle Prerequisite Optional"));
+                row.Add(optional);
+
+                var remove = new Button(() =>
+                {
+                    _context.RecordUndo("Remove Prerequisite");
+                    prerequisites.Remove(requirement);
+                    _context.NotifyChanged();
+                    RebuildPrerequisiteRows(step, container);
+                }) { text = "×" };
+                remove.style.width = 22;
+                row.Add(remove);
+
+                container.Add(row);
+            }
+
+            var add = new Button(() =>
+            {
+                _context.RecordUndo("Add Prerequisite");
+                prerequisites.Add(new BuildOrderRequirement());
+                _context.NotifyChanged();
+                RebuildPrerequisiteRows(step, container);
+            }) { text = "+ Prerequisite" };
+            add.AddToClassList("cf-chip");
+            container.Add(add);
+        }
+
+        private VisualElement BuildPrerequisiteTarget(BuildOrderStep step, BuildOrderRequirement requirement)
+        {
+            if (requirement.m_Type != BuildOrderRequirementType.Step)
+            {
+                var text = new TextField { value = requirement.m_TargetId, isDelayed = true };
+                text.style.flexGrow = 1;
+                text.RegisterValueChangedCallback(evt => Commit(() => requirement.m_TargetId = evt.newValue, "Edit Prerequisite Target"));
+                return text;
+            }
+
+            var ids = new List<string> { "" };
+            var choices = new List<string> { "(pick step)" };
+            foreach (BuildOrderStep other in _context.m_Asset.m_Steps)
+            {
+                if (other == step)
+                    continue;
+                ids.Add(other.m_Id);
+                choices.Add(string.IsNullOrWhiteSpace(other.m_Title) ? $"({other.m_Type})" : other.m_Title);
+            }
+
+            int current = ids.IndexOf(requirement.m_TargetId);
+            if (current < 0)
+                current = 0;
+
+            var dropdown = new DropdownField(choices, current);
+            dropdown.style.flexGrow = 1;
+            dropdown.RegisterValueChangedCallback(evt =>
+            {
+                int selected = choices.IndexOf(evt.newValue);
+                string id = selected >= 0 ? ids[selected] : "";
+                Commit(() => requirement.m_TargetId = id, "Edit Prerequisite Target");
+            });
+            return dropdown;
+        }
+
+        private void BuildTags(BuildOrderStep step)
+        {
+            AddSubHeader("Tags");
+            var wrap = new VisualElement();
+            wrap.style.flexDirection = FlexDirection.Row;
+            wrap.style.flexWrap = Wrap.Wrap;
+            _body.Add(wrap);
+
+            foreach (BuildOrderTag tag in _context.m_Asset.m_Tags)
+            {
+                bool assigned = step.m_TagIds.Contains(tag.m_Id);
+                var chip = new Button { text = tag.m_Label };
+                chip.AddToClassList("cf-chip");
+                chip.EnableInClassList("cf-chip--active", assigned);
+                chip.clicked += () =>
+                {
+                    _context.RecordUndo("Toggle Tag");
+                    if (assigned)
+                        step.m_TagIds.Remove(tag.m_Id);
+                    else
+                        step.m_TagIds.Add(tag.m_Id);
+                    _context.NotifyChanged();
+                };
+                wrap.Add(chip);
+            }
+
+            var newTag = new Button(() =>
+            {
+                _context.RecordUndo("Add Tag");
+                var tag = new BuildOrderTag
+                {
+                    m_Id = System.Guid.NewGuid().ToString("N"),
+                    m_Label = $"tag{_context.m_Asset.m_Tags.Count + 1}"
+                };
+                _context.m_Asset.m_Tags.Add(tag);
+                step.m_TagIds.Add(tag.m_Id);
+                _context.NotifyChanged();
+            }) { text = "+ new" };
+            newTag.AddToClassList("cf-chip");
+            wrap.Add(newTag);
         }
 
         private void BuildOrganisation(BuildOrderStep step)

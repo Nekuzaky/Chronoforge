@@ -115,8 +115,9 @@ Packages/com.nekuzaky.chronoforge/
 - [x] Runtime foundation — data model, validation, simulation, serialization
 - [x] UI Toolkit editor workspace — list, details, timeline, validation, export
 - [x] Benchmarks — checkpoint authoring, live pass/fail, timeline markers
-- [ ] Full branch / tag / prerequisite editors
-- [ ] Planned-vs-actual comparison view
+- [x] Full branch / tag / prerequisite editors
+- [x] Planned-vs-actual comparison (diff against snapshots)
+- [x] CSV import (spreadsheet migration)
 - [ ] Snapshot restore from history
 - [ ] Edit-mode test suite
 - [ ] In-game overlay companion

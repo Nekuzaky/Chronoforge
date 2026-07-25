@@ -48,6 +48,38 @@
     background-color: rgb(66, 71, 79);
 }
 
+.cf-chip--active {
+    background-color: rgb(76, 154, 255);
+    color: rgb(18, 20, 24);
+}
+
+/* ---- Diff rows ---- */
+.cf-diff {
+    flex-direction: row;
+    align-items: center;
+    padding: 3px 8px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(24, 26, 29);
+}
+
+.cf-diff__glyph {
+    width: 14px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    margin-right: 6px;
+}
+
+.cf-diff__text {
+    flex-grow: 1;
+    font-size: 11px;
+    white-space: normal;
+    color: rgb(200, 205, 213);
+}
+
+.cf-diff--added .cf-diff__glyph { color: rgb(92, 184, 92); }
+.cf-diff--removed .cf-diff__glyph { color: rgb(224, 84, 74); }
+.cf-diff--changed .cf-diff__glyph { color: rgb(224, 168, 52); }
+
 /* ---- Body: three columns ---- */
 .cf-body {
     flex-direction: row;
