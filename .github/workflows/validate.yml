@@ -1,0 +1,41 @@
+name: Validate Package
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  package:
+    name: Package structure & metadata
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate package.json
+        run: |
+          PKG="Packages/com.nekuzaky.chronoforge/package.json"
+          echo "Validating $PKG"
+          jq empty "$PKG"
+          NAME=$(jq -r '.name' "$PKG")
+          VERSION=$(jq -r '.version' "$PKG")
+          UNITY=$(jq -r '.unity' "$PKG")
+          test "$NAME" = "com.nekuzaky.chronoforge" || { echo "Unexpected package name: $NAME"; exit 1; }
+          test "$VERSION" != "null" || { echo "Missing version"; exit 1; }
+          test "$UNITY" != "null" || { echo "Missing unity field"; exit 1; }
+          echo "OK — $NAME v$VERSION (Unity $UNITY)"
+
+      - name: Assembly definitions present
+        run: |
+          test -f Packages/com.nekuzaky.chronoforge/src/Runtime/Chronoforge.Runtime.asmdef
+          test -f Packages/com.nekuzaky.chronoforge/src/Editor/Chronoforge.Editor.asmdef
+          echo "OK — both assemblies present"
+
+      - name: Editor must not leak into Runtime
+        run: |
+          if grep -rn "using UnityEditor" Packages/com.nekuzaky.chronoforge/src/Runtime; then
+            echo "Runtime code must not depend on UnityEditor."
+            exit 1
+          fi
+          echo "OK — runtime is editor-free"

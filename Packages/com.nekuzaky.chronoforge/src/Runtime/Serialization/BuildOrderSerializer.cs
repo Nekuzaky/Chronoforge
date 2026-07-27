@@ -57,7 +57,9 @@ namespace Chronoforge
             if (ImportJson(json, asset, out error))
                 return asset;
 
-            Object.DestroyImmediate(asset);
+            // Fully qualified: this file imports both System and UnityEngine, so bare `Object`
+            // is ambiguous between System.Object and UnityEngine.Object.
+            UnityEngine.Object.DestroyImmediate(asset);
             return null;
         }
 
