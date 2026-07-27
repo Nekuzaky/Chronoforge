@@ -20,11 +20,14 @@ namespace Chronoforge.Demo
         public bool m_AutoPlay = true;
         [Range(0.25f, 8f)] public float m_Speed = 2f;
         public bool m_ShowTransport = true;
+        public bool m_ShowGuide = true;
 
         private BuildOrderOverlay _overlay;
         private BuildOrderEvaluationResult _evaluation = new();
         private bool _playing;
         private GUIStyle _label;
+        private GUIStyle _rich;
+        private GUIStyle _wrapped;
 
         private void OnEnable()
         {
@@ -59,9 +62,6 @@ namespace Chronoforge.Demo
         #region Transport (development harness)
         private void OnGUI()
         {
-            if (!m_ShowTransport)
-                return;
-
             EnsureStyles();
 
             if (_overlay.m_BuildOrder == null)
@@ -70,9 +70,33 @@ namespace Chronoforge.Demo
                 return;
             }
 
+            if (m_ShowGuide)
+                DrawGuide();
+
+            if (!m_ShowTransport)
+                return;
+
             GUILayout.BeginArea(new Rect(16f, Screen.height - 74f, 380f, 58f), GUI.skin.box);
             DrawButtons();
             DrawScrubber();
+            GUILayout.EndArea();
+        }
+
+        /// <summary>
+        /// Says what to look at. A playback with no explanation demonstrates nothing — the point of
+        /// the demo is the link between what runs here and what the editor window shows.
+        /// </summary>
+        private void DrawGuide()
+        {
+            GUILayout.BeginArea(new Rect(16f, 16f, 360f, 132f), GUI.skin.box);
+            GUILayout.Label("<b>Chronoforge demo</b>", _rich);
+            GUILayout.Label(
+                "Top right: the in-game overlay tracking this build order live — current step marked, " +
+                "next ones previewed, a warning when a due benchmark is missed.\n\n" +
+                "Now select SO_DemoBuildOrder and press Open in Chronoforge. The sample contains two " +
+                "deliberate flaws (a worker gap, a missed benchmark) so Validation and Clean Build " +
+                "have something to report.",
+                _wrapped);
             GUILayout.EndArea();
         }
 
@@ -100,7 +124,13 @@ namespace Chronoforge.Demo
                 _overlay.CurrentTime = scrubbed;
         }
 
-        private void EnsureStyles() => _label ??= new GUIStyle(GUI.skin.label) { fontSize = 11 };
+        /// <summary>Styles are cached: building them per frame in OnGUI would allocate every frame.</summary>
+        private void EnsureStyles()
+        {
+            _label ??= new GUIStyle(GUI.skin.label) { fontSize = 11 };
+            _rich ??= new GUIStyle(GUI.skin.label) { fontSize = 12, richText = true };
+            _wrapped ??= new GUIStyle(GUI.skin.label) { fontSize = 11, wordWrap = true };
+        }
         #endregion
     }
 }
