@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
@@ -18,12 +19,48 @@ namespace Chronoforge
         }
 
         #region JSON
-        public static string ExportJson(BuildOrderAsset asset)
+        public static string ExportJson(BuildOrderAsset asset) => ExportJson(asset, includeHistory: true);
+
+        /// <summary>
+        /// Serializes the asset. Set <paramref name="includeHistory"/> false when the payload is
+        /// itself stored inside a snapshot — otherwise each snapshot re-embeds all prior snapshots
+        /// and the blob grows exponentially.
+        /// </summary>
+        public static string ExportJson(BuildOrderAsset asset, bool includeHistory)
         {
             if (asset == null)
                 return "{}";
+
             asset.m_SchemaVersion = BuildOrderAsset.k_SchemaVersion;
-            return JsonUtility.ToJson(asset, prettyPrint: true);
+            if (includeHistory)
+                return JsonUtility.ToJson(asset, prettyPrint: true);
+
+            List<BuildOrderSnapshot> saved = asset.m_Snapshots;
+            asset.m_Snapshots = new List<BuildOrderSnapshot>();
+            try
+            {
+                return JsonUtility.ToJson(asset, prettyPrint: true);
+            }
+            finally
+            {
+                asset.m_Snapshots = saved;
+            }
+        }
+
+        /// <summary>
+        /// Builds a fresh detached asset from JSON — used to rehydrate snapshots for comparison.
+        /// Returns null on failure. The caller owns the instance (destroy it when done).
+        /// </summary>
+        public static BuildOrderAsset CreateFromJson(string json, out string error)
+        {
+            var asset = ScriptableObject.CreateInstance<BuildOrderAsset>();
+            if (ImportJson(json, asset, out error))
+                return asset;
+
+            // Fully qualified: this file imports both System and UnityEngine, so bare `Object`
+            // is ambiguous between System.Object and UnityEngine.Object.
+            UnityEngine.Object.DestroyImmediate(asset);
+            return null;
         }
 
         /// <summary>

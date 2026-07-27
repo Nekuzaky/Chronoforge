@@ -17,10 +17,17 @@ namespace Chronoforge.Editor
 
         private readonly BuildOrderEditorContext _context = new();
 
+        private BuildOrderSearchBar _searchBar;
         private BuildOrderListView _listView;
         private BuildOrderDetailsPanel _detailsPanel;
         private BuildOrderValidationPanel _validationPanel;
         private BuildOrderTimelineView _timelineView;
+        private BuildOrderBenchmarkPanel _benchmarkPanel;
+        private BuildOrderStructurePanel _structurePanel;
+        private BuildOrderComparePanel _comparePanel;
+        private BuildOrderHistoryPanel _historyPanel;
+        private BuildOrderCleanBuildPanel _cleanBuildPanel;
+        private BuildOrderTemplatePanel _templatePanel;
         private Label _status;
 
         #region Entry points
@@ -103,7 +110,8 @@ namespace Chronoforge.Editor
             var listColumn = new VisualElement();
             listColumn.AddToClassList("cf-column");
             listColumn.AddToClassList("cf-column--list");
-            listColumn.Add(new BuildOrderSearchBar(_context));
+            _searchBar = new BuildOrderSearchBar(_context);
+            listColumn.Add(_searchBar);
             _listView = new BuildOrderListView(_context);
             listColumn.Add(_listView);
 
@@ -119,11 +127,26 @@ namespace Chronoforge.Editor
             var sideColumn = new VisualElement();
             sideColumn.AddToClassList("cf-column");
             sideColumn.AddToClassList("cf-column--side");
+            var sideScroll = new ScrollView(ScrollViewMode.Vertical);
+            sideScroll.style.flexGrow = 1;
             _timelineView = new BuildOrderTimelineView(_context);
-            sideColumn.Add(_timelineView);
+            sideScroll.Add(_timelineView);
+            _benchmarkPanel = new BuildOrderBenchmarkPanel(_context);
+            sideScroll.Add(_benchmarkPanel);
+            _cleanBuildPanel = new BuildOrderCleanBuildPanel(_context);
+            sideScroll.Add(_cleanBuildPanel);
+            _structurePanel = new BuildOrderStructurePanel(_context);
+            sideScroll.Add(_structurePanel);
+            _comparePanel = new BuildOrderComparePanel(_context);
+            sideScroll.Add(_comparePanel);
+            _templatePanel = new BuildOrderTemplatePanel(_context);
+            sideScroll.Add(_templatePanel);
+            _historyPanel = new BuildOrderHistoryPanel(_context);
+            sideScroll.Add(_historyPanel);
             _validationPanel = new BuildOrderValidationPanel(_context);
-            sideColumn.Add(_validationPanel);
-            sideColumn.Add(new BuildOrderExportPanel(_context));
+            sideScroll.Add(_validationPanel);
+            sideScroll.Add(new BuildOrderExportPanel(_context));
+            sideColumn.Add(sideScroll);
 
             body.Add(listColumn);
             body.Add(detailsColumn);
@@ -147,10 +170,17 @@ namespace Chronoforge.Editor
             if (_listView == null)
                 return;
 
+            _searchBar.Rebuild();
             _listView.Refresh();
             _detailsPanel.Rebuild();
             _validationPanel.Rebuild();
             _timelineView.Rebuild();
+            _benchmarkPanel.Rebuild();
+            _cleanBuildPanel.Rebuild();
+            _structurePanel.Rebuild();
+            _comparePanel.Rebuild();
+            _templatePanel.Rebuild();
+            _historyPanel.Rebuild();
             UpdateStatus();
         }
 
@@ -169,9 +199,14 @@ namespace Chronoforge.Editor
             }
 
             BuildOrderEvaluationResult evaluation = _context.m_Evaluation;
+            int total = _context.m_Asset.m_Steps.Count;
+            string steps = _context.HasFilter
+                ? $"{_context.GetVisibleSteps().Count} of {total} steps shown"
+                : $"{total} steps";
+
             _status.text =
-                $"{_context.m_Asset.m_Steps.Count} steps   ·   " +
-                $"{BuildOrderTime.Format(evaluation.m_TotalSeconds)} total   ·   " +
+                $"{steps}   ·   " +
+                $"{BuildOrderTime.Format(evaluation.m_TotalSeconds)}   ·   " +
                 $"supply {evaluation.m_FinalSupply}   ·   " +
                 $"{evaluation.ErrorCount} errors, {evaluation.WarningCount} warnings";
         }
@@ -189,16 +224,58 @@ namespace Chronoforge.Editor
                 return;
             }
 
-            if (evt.keyCode == KeyCode.Delete)
+            bool command = evt.ctrlKey || evt.commandKey;
+
+            switch (evt.keyCode)
             {
-                _context.RemoveSelected();
-                evt.StopPropagation();
+                case KeyCode.Delete:
+                    _context.RemoveSelected();
+                    evt.StopPropagation();
+                    return;
+                case KeyCode.UpArrow:
+                    _context.MoveSelection(-1);
+                    evt.StopPropagation();
+                    return;
+                case KeyCode.DownArrow:
+                    _context.MoveSelection(1);
+                    evt.StopPropagation();
+                    return;
             }
-            else if (evt.ctrlKey && evt.keyCode == KeyCode.D)
+
+            if (!command)
+                return;
+
+            switch (evt.keyCode)
             {
-                _context.DuplicateSelected();
-                evt.StopPropagation();
+                case KeyCode.D:
+                    _context.DuplicateSelected();
+                    evt.StopPropagation();
+                    break;
+                case KeyCode.C:
+                    Report(_context.CopySelection(), "Copied");
+                    evt.StopPropagation();
+                    break;
+                case KeyCode.X:
+                    Report(_context.CutSelection(), "Cut");
+                    evt.StopPropagation();
+                    break;
+                case KeyCode.V:
+                    Paste();
+                    evt.StopPropagation();
+                    break;
             }
+        }
+
+        private void Paste()
+        {
+            if (!_context.PasteAfterSelection(out string error))
+                ShowNotification(new GUIContent(error));
+        }
+
+        private void Report(int count, string verb)
+        {
+            if (count > 0)
+                ShowNotification(new GUIContent($"{verb} {count} step{(count == 1 ? "" : "s")}"));
         }
 
         private bool TryQuickAddKey(KeyCode keyCode)

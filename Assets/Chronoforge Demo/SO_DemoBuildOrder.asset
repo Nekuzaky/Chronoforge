@@ -1,0 +1,199 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fd969635b0c8904d80d88be94f1d671, type: 3}
+  m_Name: SO_DemoBuildOrder
+  m_EditorClassIdentifier: Chronoforge.Runtime::Chronoforge.BuildOrderAsset
+  m_SchemaVersion: 4
+  m_Title: Aggressive Opening (Demo)
+  m_Game: Generic RTS
+  m_Faction: Swarm
+  m_Description: Sample build order shipped with Chronoforge. Edit it in the editor
+    window; press Play in the demo scene to watch it run.
+  m_Author: 
+  m_IsTemplate: 0
+  m_Steps:
+  - m_Id: d898d3953c4d40378a67478692c35376
+    m_Title: Worker
+    m_Description: 
+    m_Type: 3
+    m_Supply: 12
+    m_TimeSeconds: 0
+    m_PopulationRequirement: 0
+    m_PopulationDelta: 1
+    m_EstimatedDuration: 0
+    m_SupplyProvided: 0
+    m_ProvidesFacilityId: 
+    m_ProducedByFacilityId: 
+    m_IsWorker: 0
+    m_ResourceCost:
+      m_Amounts:
+      - m_ResourceId: minerals
+        m_Amount: 50
+    m_Prerequisites: []
+    m_BranchKey: 
+    m_TagIds: []
+    m_DesignerNotes: 
+    m_Priority: 1
+    m_Optional: 0
+    m_Repeatable: 0
+    m_Status: 0
+    m_ValidationState: 0
+  - m_Id: 09532bc312fa4c66840ecdced21f4aa8
+    m_Title: Worker
+    m_Description: 
+    m_Type: 3
+    m_Supply: 13
+    m_TimeSeconds: 12
+    m_PopulationRequirement: 0
+    m_PopulationDelta: 1
+    m_EstimatedDuration: 0
+    m_SupplyProvided: 0
+    m_ProvidesFacilityId: 
+    m_ProducedByFacilityId: 
+    m_IsWorker: 0
+    m_ResourceCost:
+      m_Amounts:
+      - m_ResourceId: minerals
+        m_Amount: 50
+    m_Prerequisites: []
+    m_BranchKey: 
+    m_TagIds: []
+    m_DesignerNotes: 
+    m_Priority: 1
+    m_Optional: 0
+    m_Repeatable: 0
+    m_Status: 0
+    m_ValidationState: 0
+  - m_Id: aa7d204a56654cc9b8c29cb98137e768
+    m_Title: Spawning Pool
+    m_Description: 
+    m_Type: 1
+    m_Supply: 13
+    m_TimeSeconds: 24
+    m_PopulationRequirement: 0
+    m_PopulationDelta: 0
+    m_EstimatedDuration: 0
+    m_SupplyProvided: 0
+    m_ProvidesFacilityId: 
+    m_ProducedByFacilityId: 
+    m_IsWorker: 0
+    m_ResourceCost:
+      m_Amounts:
+      - m_ResourceId: minerals
+        m_Amount: 200
+    m_Prerequisites: []
+    m_BranchKey: 
+    m_TagIds: []
+    m_DesignerNotes: 
+    m_Priority: 1
+    m_Optional: 0
+    m_Repeatable: 0
+    m_Status: 0
+    m_ValidationState: 0
+  - m_Id: d151d3898c224ea99eea3a4980126dc1
+    m_Title: Overlord
+    m_Description: 
+    m_Type: 0
+    m_Supply: 13
+    m_TimeSeconds: 30
+    m_PopulationRequirement: 0
+    m_PopulationDelta: 8
+    m_EstimatedDuration: 0
+    m_SupplyProvided: 0
+    m_ProvidesFacilityId: 
+    m_ProducedByFacilityId: 
+    m_IsWorker: 0
+    m_ResourceCost:
+      m_Amounts:
+      - m_ResourceId: minerals
+        m_Amount: 100
+    m_Prerequisites: []
+    m_BranchKey: 
+    m_TagIds: []
+    m_DesignerNotes: 
+    m_Priority: 1
+    m_Optional: 0
+    m_Repeatable: 0
+    m_Status: 0
+    m_ValidationState: 0
+  - m_Id: e1453991394a444c814b1a214900780c
+    m_Title: Scout with worker
+    m_Description: 
+    m_Type: 4
+    m_Supply: 13
+    m_TimeSeconds: 35
+    m_PopulationRequirement: 0
+    m_PopulationDelta: 0
+    m_EstimatedDuration: 0
+    m_SupplyProvided: 0
+    m_ProvidesFacilityId: 
+    m_ProducedByFacilityId: 
+    m_IsWorker: 0
+    m_ResourceCost:
+      m_Amounts: []
+    m_Prerequisites: []
+    m_BranchKey: 
+    m_TagIds: []
+    m_DesignerNotes: 
+    m_Priority: 1
+    m_Optional: 0
+    m_Repeatable: 0
+    m_Status: 0
+    m_ValidationState: 0
+  - m_Id: d5d8e9aafb80406f8bcd4889d1d0f033
+    m_Title: First attack wave
+    m_Description: 
+    m_Type: 5
+    m_Supply: 16
+    m_TimeSeconds: 120
+    m_PopulationRequirement: 0
+    m_PopulationDelta: 0
+    m_EstimatedDuration: 0
+    m_SupplyProvided: 0
+    m_ProvidesFacilityId: 
+    m_ProducedByFacilityId: 
+    m_IsWorker: 0
+    m_ResourceCost:
+      m_Amounts: []
+    m_Prerequisites: []
+    m_BranchKey: 
+    m_TagIds: []
+    m_DesignerNotes: 
+    m_Priority: 1
+    m_Optional: 0
+    m_Repeatable: 0
+    m_Status: 0
+    m_ValidationState: 0
+  m_Branches: []
+  m_Tags: []
+  m_ResourceModel:
+  - m_ResourceId: minerals
+    m_StartingAmount: 50
+    m_IncomePerSecond: 1.4
+  m_Benchmarks:
+  - m_Label: Pool timing
+    m_AnchorTimeSeconds: 40
+    m_CheckSupply: 1
+    m_ExpectedSupply: 13
+    m_RequiredStepId: 
+    m_ToleranceSeconds: 5
+  m_CleanBuild:
+    m_Enabled: 0
+    m_StartingSupplyCap: 15
+    m_CheckSupplyBlocks: 1
+    m_CheckStockpiling: 1
+    m_CheckIdleProduction: 1
+    m_CheckWorkerGaps: 1
+    m_StockpileThreshold: 400
+    m_MaxFacilityIdleSeconds: 25
+    m_MaxWorkerGapSeconds: 20
+  m_Snapshots: []
