@@ -155,3 +155,8 @@ functions. Each rule and how it's applied is documented in
 ## License
 
 [MIT](LICENSE.md) © nekuzaky
+
+
+## Contact
+
+Website: [www.nekuzaky.com](https://www.nekuzaky.com) · Email: [contact@nekuzaky.com](mailto:contact@nekuzaky.com)
