@@ -315,13 +315,13 @@ namespace Chronoforge.Editor
             var newTag = new Button(() =>
             {
                 _context.RecordUndo("Add Tag");
-                var tag = new BuildOrderTag
+                var created = new BuildOrderTag
                 {
                     m_Id = System.Guid.NewGuid().ToString("N"),
                     m_Label = $"tag{_context.m_Asset.m_Tags.Count + 1}"
                 };
-                _context.m_Asset.m_Tags.Add(tag);
-                step.m_TagIds.Add(tag.m_Id);
+                _context.m_Asset.m_Tags.Add(created);
+                step.m_TagIds.Add(created.m_Id);
                 _context.NotifyChanged();
             }) { text = "+ new" };
             newTag.AddToClassList("cf-chip");
@@ -340,10 +340,10 @@ namespace Chronoforge.Editor
             if (!branchChoices.Contains(current))
                 branchChoices.Add(current);
 
-            var branch = new DropdownField("Branch", branchChoices, current);
-            branch.RegisterValueChangedCallback(evt =>
+            var branchField = new DropdownField("Branch", branchChoices, current);
+            branchField.RegisterValueChangedCallback(evt =>
                 Commit(() => step.m_BranchKey = evt.newValue == "(mainline)" ? "" : evt.newValue, "Edit Branch"));
-            _body.Add(branch);
+            _body.Add(branchField);
 
             var priority = new EnumField("Priority", step.m_Priority);
             priority.RegisterValueChangedCallback(evt => Commit(() => step.m_Priority = (BuildOrderPriority)evt.newValue, "Edit Priority"));
