@@ -1,6 +1,6 @@
 <div align="center">
 
-# ⚔️ Chronoforge
+# Chronoforge
 
 **A premium build order editor for Unity.**
 
@@ -24,28 +24,28 @@ baked into.
 
 > Stop iterating build orders in a spreadsheet. Forge them.
 
-## ✨ Features
+## Features
 
 | | |
 | --- | --- |
-| 🗂️ **Three-column workspace** | Step list · step details · timeline + validation, all live. |
-| ⌨️ **Keyboard-first** | Insert steps with `1`–`6`, navigate with arrows, multi-select, copy/cut/paste **across assets**, duplicate, delete — all without leaving the keyboard. |
-| 🧩 **Templates** | Flag any build order as a template, then append or replace from it in one click. |
-| 🎯 **Benchmarks** | Author timing/supply checkpoints ("Factory by 2:24 at 23 supply"); live pass/fail per checkpoint and markers over the timeline. |
-| ✅ **Live validation** | 12 rules — timing, supply, cost, prerequisites, branches, duplicates, incomplete data — surfaced without blocking editing. |
-| 🧹 **Clean-build analysis** | Opt-in execution-quality checks: supply blocks, idle production, resource stockpiling, worker gaps — the things a spreadsheet can't tell you. |
-| 📊 **Lightweight simulation** | Timeline, cumulative supply, and resource shortfall against an optional per-resource economy model. |
-| 🔀 **Conditional branches** | Named variation lanes gated by designer-authored conditions. |
-| 🏷️ **Tags & filtering** | Reusable coloured labels, toggle-chip filtering by tag, and instant text search over the step list. |
-| 💾 **Import / export** | Schema-versioned JSON round-trip + a readable text share format. |
-| 🕓 **Snapshots** | Capture state for history and planned-vs-actual comparison. |
-| 🧩 **11 native step types** | Unit, Building, Upgrade, Economy, Scout, Attack, Expand, Tech, Defense, Note, Custom. |
+| **Three-column workspace** | Step list · step details · timeline + validation, all live. |
+| **Keyboard-first** | Insert steps with `1`–`6`, navigate with arrows, multi-select, copy/cut/paste **across assets**, duplicate, delete — all without leaving the keyboard. |
+| **Templates** | Flag any build order as a template, then append or replace from it in one click. |
+| **Benchmarks** | Author timing/supply checkpoints ("Factory by 2:24 at 23 supply"); live pass/fail per checkpoint and markers over the timeline. |
+| **Live validation** | 12 rules — timing, supply, cost, prerequisites, branches, duplicates, incomplete data — surfaced without blocking editing. |
+| **Clean-build analysis** | Opt-in execution-quality checks: supply blocks, idle production, resource stockpiling, worker gaps — the things a spreadsheet can't tell you. |
+| **Lightweight simulation** | Timeline, cumulative supply, and resource shortfall against an optional per-resource economy model. |
+| **Conditional branches** | Named variation lanes gated by designer-authored conditions. |
+| **Tags and filtering** | Reusable coloured labels, toggle-chip filtering by tag, and instant text search over the step list. |
+| **Import / export** | Schema-versioned JSON round-trip, CSV import, and a readable text share format. |
+| **Snapshots** | Capture state for history, restore, and planned-vs-actual comparison. |
+| **11 native step types** | Unit, Building, Upgrade, Economy, Scout, Attack, Expand, Tech, Defense, Note, Custom. |
 
-## 📸 Screenshots
+## Screenshots
 
-> _Coming soon — open the package in Unity 6 and drop editor captures here._
+_Coming soon — open the package in Unity 6 and drop editor captures here._
 
-## 📦 Installation
+## Installation
 
 **Via Unity Package Manager (git URL)** — `Window ▸ Package Manager ▸ + ▸ Add package from git URL`:
 
@@ -56,17 +56,18 @@ https://github.com/Nekuzaky/Chronoforge.git?path=/Packages/com.nekuzaky.chronofo
 **Or** clone this repository and open it directly in Unity 6 (6000.0+). The package
 lives at `Packages/com.nekuzaky.chronoforge/`. No external dependencies.
 
-## 🚀 Quick start
+## Quick start
 
 1. Create an asset: `Assets ▸ Create ▸ Chronoforge ▸ Build Order`
    (or right-click in the Project window).
 2. Double-click it, or press **Open in Chronoforge** in the inspector.
 3. Add steps from the toolbar or with the number keys, edit in the details panel,
    and watch validation and the timeline update live.
-4. Export to JSON or text to share — or import an existing JSON build order.
+4. Export to JSON or text to share — or import an existing JSON or CSV build order.
 
 **Want to see it running?** `Chronoforge ▸ Create Demo Scene` builds a sample build
-order and a scene; press Play to watch it play back with a scrub/speed overlay.
+order and a scene, wired end to end; press Play to watch it play back with the in-game
+overlay and a scrub/speed transport.
 
 ### Keyboard shortcuts
 
@@ -80,49 +81,52 @@ order and a scene; press Play to watch it play back with a scrub/speed overlay.
 | Click + `Shift` / `Ctrl` | Multi-select steps |
 | Drag | Reorder steps (when no filter is active) |
 
-## 🏗️ Architecture
+## Architecture
 
 Chronoforge enforces a **strict runtime / editor separation** so its logic is testable
-and reusable by a future overlay or companion app.
+and reusable by the in-game overlay or a companion app.
 
 ```
 Packages/com.nekuzaky.chronoforge/
 ├── src/
 │   ├── Runtime/          Chronoforge.Runtime  (no UnityEditor dependency)
 │   │   ├── Data/         Asset, Step, Branch, Condition, Requirement,
-│   │   │                 ResourceCost, Tag, Snapshot
-│   │   ├── Evaluation/   Validator, Simulator, results & issues
-│   │   └── Serialization/ schema-versioned JSON + text
+│   │   │                 ResourceCost, Tag, Benchmark, Snapshot
+│   │   ├── Evaluation/   Validator, Simulator, clean-build analyzer, queries
+│   │   └── Serialization/ schema-versioned JSON, CSV import, clipboard, text
 │   └── Editor/           Chronoforge.Editor  (UI Toolkit)
-│       ├── Panels/       list, details, timeline, benchmarks, structure,
-│       │                 compare, history, validation, export, quick-add
+│       ├── Panels/       list, details, timeline, benchmarks, clean build,
+│       │                 structure, templates, compare, history, validation,
+│       │                 export, quick-add, search
 │       └── UI/           USS theme + palette
 ├── Overlay/              Chronoforge.Overlay — in-game companion HUD
-├── Demo/                 Chronoforge.Demo — playable demo player
+├── Demo/                 Chronoforge.Demo — demo driver for the overlay
 ├── Tests/                Chronoforge.Tests — edit-mode NUnit suite
 ├── Samples~/             JSON starter templates
 └── Documentation~/
 ```
 
 - **`Chronoforge.Runtime`** — data models plus all business logic
-  (`BuildOrderValidator`, `BuildOrderSimulator`, `BuildOrderSerializer`). UI-agnostic
-  and unit-testable.
+  (`BuildOrderValidator`, `BuildOrderSimulator`, `BuildOrderCleanBuildAnalyzer`,
+  `BuildOrderSerializer`). UI-agnostic and unit-testable.
 - **`Chronoforge.Editor`** — the UI Toolkit workspace. Panels are decoupled
   `VisualElement`s wired through a single `BuildOrderEditorContext`; no build-order
   logic lives here.
+- **`Chronoforge.Overlay`** — runtime UI Toolkit HUD driven by the host game's clock.
 
 ### Data model
 
 | Type | Role |
 | --- | --- |
-| `BuildOrderAsset` | The document: metadata, steps, branches, tags, resource model, snapshots. |
+| `BuildOrderAsset` | The document: metadata, steps, branches, tags, benchmarks, resource model, snapshots. |
 | `BuildOrderStep` | A single planned action — id-stable and self-describing. |
 | `BuildOrderBranch` / `BuildOrderCondition` | A named variation lane and its gating condition. |
 | `BuildOrderRequirement` | A prerequisite pointing at a step / resource / key. |
 | `BuildOrderResourceCost` | Per-resource cost lines + the economy rate model. |
+| `BuildOrderBenchmark` | A timing/supply checkpoint the build aims to hit. |
 | `BuildOrderSnapshot` | Timestamped serialized copy for history / comparison. |
 
-## 🗺️ Roadmap
+## Roadmap
 
 - [x] Runtime foundation — data model, validation, simulation, serialization
 - [x] UI Toolkit editor workspace — list, details, timeline, validation, export
@@ -132,9 +136,12 @@ Packages/com.nekuzaky.chronoforge/
 - [x] CSV import (spreadsheet migration)
 - [x] Snapshot restore from history
 - [x] Edit-mode test suite
-- [x] In-game overlay companion
+- [x] Clean-build execution analysis
+- [x] In-game overlay companion (runtime UI Toolkit)
+- [x] Multi-select, cross-asset copy/paste, templates
+- [ ] Asset Store packaging — screenshots, listing, submission
 
-## 🤝 Contributing
+## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the branch model, commit convention, and
 code style. In short: `feature/*` → PR into `develop` → release into `main`; runtime
@@ -145,6 +152,6 @@ bounded loops, no recursion, no allocation in hot paths, validated parameters, s
 functions. Each rule and how it's applied is documented in
 [`Documentation~/coding-standard.md`](Packages/com.nekuzaky.chronoforge/Documentation~/coding-standard.md).
 
-## 📄 License
+## License
 
 [MIT](LICENSE.md) © nekuzaky
