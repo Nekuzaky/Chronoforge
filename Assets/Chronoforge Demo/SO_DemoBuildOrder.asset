@@ -13,15 +13,19 @@ MonoBehaviour:
   m_Name: SO_DemoBuildOrder
   m_EditorClassIdentifier: Chronoforge.Runtime::Chronoforge.BuildOrderAsset
   m_SchemaVersion: 4
-  m_Title: Aggressive Opening (Demo)
+  m_Title: Two-Base Mech Opening (Demo)
   m_Game: Generic RTS
-  m_Faction: Swarm
-  m_Description: Sample build order shipped with Chronoforge. Edit it in the editor
-    window; press Play in the demo scene to watch it run.
-  m_Author: 
+  m_Faction: Vanguard
+  m_Description: "A worked example covering every Chronoforge feature: typed steps,
+    resource costs, prerequisites, tags, a conditional branch, benchmarks and the
+    clean-build analysis.\n\nIt contains two DELIBERATE flaws so the analysis has
+    something to report:\n  \u2022 worker production pauses for 45 s around 1:15\n 
+    \u2022 the \"Factory online\" benchmark is missed\nOpen the Validation and Clean
+    Build panels to see both."
+  m_Author: Chronoforge sample
   m_IsTemplate: 0
   m_Steps:
-  - m_Id: d898d3953c4d40378a67478692c35376
+  - m_Id: a30a62776bdd4aa9b55ed60c296febc9
     m_Title: Worker
     m_Description: 
     m_Type: 3
@@ -29,25 +33,26 @@ MonoBehaviour:
     m_TimeSeconds: 0
     m_PopulationRequirement: 0
     m_PopulationDelta: 1
-    m_EstimatedDuration: 0
+    m_EstimatedDuration: 12
     m_SupplyProvided: 0
     m_ProvidesFacilityId: 
     m_ProducedByFacilityId: 
-    m_IsWorker: 0
+    m_IsWorker: 1
     m_ResourceCost:
       m_Amounts:
       - m_ResourceId: minerals
         m_Amount: 50
     m_Prerequisites: []
     m_BranchKey: 
-    m_TagIds: []
+    m_TagIds:
+    - economy
     m_DesignerNotes: 
     m_Priority: 1
     m_Optional: 0
     m_Repeatable: 0
     m_Status: 0
     m_ValidationState: 0
-  - m_Id: 09532bc312fa4c66840ecdced21f4aa8
+  - m_Id: fc2eb7f5954643b3bb461cbc43145f3a
     m_Title: Worker
     m_Description: 
     m_Type: 3
@@ -55,30 +60,112 @@ MonoBehaviour:
     m_TimeSeconds: 12
     m_PopulationRequirement: 0
     m_PopulationDelta: 1
-    m_EstimatedDuration: 0
+    m_EstimatedDuration: 12
     m_SupplyProvided: 0
     m_ProvidesFacilityId: 
     m_ProducedByFacilityId: 
-    m_IsWorker: 0
+    m_IsWorker: 1
     m_ResourceCost:
       m_Amounts:
       - m_ResourceId: minerals
         m_Amount: 50
     m_Prerequisites: []
     m_BranchKey: 
-    m_TagIds: []
+    m_TagIds:
+    - economy
     m_DesignerNotes: 
     m_Priority: 1
     m_Optional: 0
     m_Repeatable: 0
     m_Status: 0
     m_ValidationState: 0
-  - m_Id: aa7d204a56654cc9b8c29cb98137e768
-    m_Title: Spawning Pool
+  - m_Id: 7fd69b75b2454cfb8680324c65518997
+    m_Title: Supply Depot
     m_Description: 
     m_Type: 1
-    m_Supply: 13
-    m_TimeSeconds: 24
+    m_Supply: 14
+    m_TimeSeconds: 26
+    m_PopulationRequirement: 0
+    m_PopulationDelta: 0
+    m_EstimatedDuration: 21
+    m_SupplyProvided: 8
+    m_ProvidesFacilityId: 
+    m_ProducedByFacilityId: 
+    m_IsWorker: 0
+    m_ResourceCost:
+      m_Amounts:
+      - m_ResourceId: minerals
+        m_Amount: 100
+    m_Prerequisites: []
+    m_BranchKey: 
+    m_TagIds:
+    - economy
+    m_DesignerNotes: 
+    m_Priority: 1
+    m_Optional: 0
+    m_Repeatable: 0
+    m_Status: 0
+    m_ValidationState: 0
+  - m_Id: e6697dc7e8054c5aba9a13adf4363bc0
+    m_Title: Worker
+    m_Description: 
+    m_Type: 3
+    m_Supply: 14
+    m_TimeSeconds: 30
+    m_PopulationRequirement: 0
+    m_PopulationDelta: 1
+    m_EstimatedDuration: 12
+    m_SupplyProvided: 0
+    m_ProvidesFacilityId: 
+    m_ProducedByFacilityId: 
+    m_IsWorker: 1
+    m_ResourceCost:
+      m_Amounts:
+      - m_ResourceId: minerals
+        m_Amount: 50
+    m_Prerequisites: []
+    m_BranchKey: 
+    m_TagIds:
+    - economy
+    m_DesignerNotes: 
+    m_Priority: 1
+    m_Optional: 0
+    m_Repeatable: 0
+    m_Status: 0
+    m_ValidationState: 0
+  - m_Id: 81224d6f46424e70991787621a54c5e0
+    m_Title: Barracks
+    m_Description: 
+    m_Type: 1
+    m_Supply: 15
+    m_TimeSeconds: 50
+    m_PopulationRequirement: 0
+    m_PopulationDelta: 0
+    m_EstimatedDuration: 46
+    m_SupplyProvided: 0
+    m_ProvidesFacilityId: barracks
+    m_ProducedByFacilityId: 
+    m_IsWorker: 0
+    m_ResourceCost:
+      m_Amounts:
+      - m_ResourceId: minerals
+        m_Amount: 150
+    m_Prerequisites: []
+    m_BranchKey: 
+    m_TagIds:
+    - army
+    m_DesignerNotes: 
+    m_Priority: 1
+    m_Optional: 0
+    m_Repeatable: 0
+    m_Status: 0
+    m_ValidationState: 0
+  - m_Id: 072b42f655664a5097bc65367b35f09d
+    m_Title: Refinery
+    m_Description: 
+    m_Type: 3
+    m_Supply: 16
+    m_TimeSeconds: 64
     m_PopulationRequirement: 0
     m_PopulationDelta: 0
     m_EstimatedDuration: 0
@@ -89,24 +176,135 @@ MonoBehaviour:
     m_ResourceCost:
       m_Amounts:
       - m_ResourceId: minerals
-        m_Amount: 200
+        m_Amount: 75
     m_Prerequisites: []
     m_BranchKey: 
-    m_TagIds: []
+    m_TagIds:
+    - economy
     m_DesignerNotes: 
     m_Priority: 1
     m_Optional: 0
     m_Repeatable: 0
     m_Status: 0
     m_ValidationState: 0
-  - m_Id: d151d3898c224ea99eea3a4980126dc1
-    m_Title: Overlord
+  - m_Id: 8c27f885067c4d198e606405c8868645
+    m_Title: Worker
+    m_Description: 
+    m_Type: 3
+    m_Supply: 17
+    m_TimeSeconds: 83
+    m_PopulationRequirement: 0
+    m_PopulationDelta: 1
+    m_EstimatedDuration: 12
+    m_SupplyProvided: 0
+    m_ProvidesFacilityId: 
+    m_ProducedByFacilityId: 
+    m_IsWorker: 1
+    m_ResourceCost:
+      m_Amounts:
+      - m_ResourceId: minerals
+        m_Amount: 50
+    m_Prerequisites: []
+    m_BranchKey: 
+    m_TagIds:
+    - economy
+    m_DesignerNotes: 
+    m_Priority: 1
+    m_Optional: 0
+    m_Repeatable: 0
+    m_Status: 0
+    m_ValidationState: 0
+  - m_Id: 2f62990b272d4fadb2b38c4ea4e65ef0
+    m_Title: Marine
     m_Description: 
     m_Type: 0
-    m_Supply: 13
-    m_TimeSeconds: 30
+    m_Supply: 18
+    m_TimeSeconds: 98
     m_PopulationRequirement: 0
-    m_PopulationDelta: 8
+    m_PopulationDelta: 1
+    m_EstimatedDuration: 18
+    m_SupplyProvided: 0
+    m_ProvidesFacilityId: 
+    m_ProducedByFacilityId: barracks
+    m_IsWorker: 0
+    m_ResourceCost:
+      m_Amounts:
+      - m_ResourceId: minerals
+        m_Amount: 50
+    m_Prerequisites: []
+    m_BranchKey: 
+    m_TagIds:
+    - army
+    m_DesignerNotes: 
+    m_Priority: 1
+    m_Optional: 0
+    m_Repeatable: 0
+    m_Status: 0
+    m_ValidationState: 0
+  - m_Id: 4c4179d8b31a4bd9b832defdd565b9c0
+    m_Title: Marine
+    m_Description: 
+    m_Type: 0
+    m_Supply: 19
+    m_TimeSeconds: 118
+    m_PopulationRequirement: 0
+    m_PopulationDelta: 1
+    m_EstimatedDuration: 18
+    m_SupplyProvided: 0
+    m_ProvidesFacilityId: 
+    m_ProducedByFacilityId: barracks
+    m_IsWorker: 0
+    m_ResourceCost:
+      m_Amounts:
+      - m_ResourceId: minerals
+        m_Amount: 50
+    m_Prerequisites: []
+    m_BranchKey: 
+    m_TagIds:
+    - army
+    m_DesignerNotes: 
+    m_Priority: 1
+    m_Optional: 0
+    m_Repeatable: 0
+    m_Status: 0
+    m_ValidationState: 0
+  - m_Id: 3b92d3666a614f4ca378c004e2715d95
+    m_Title: Scout with a marine
+    m_Description: 
+    m_Type: 4
+    m_Supply: 19
+    m_TimeSeconds: 130
+    m_PopulationRequirement: 0
+    m_PopulationDelta: 0
+    m_EstimatedDuration: 0
+    m_SupplyProvided: 0
+    m_ProvidesFacilityId: 
+    m_ProducedByFacilityId: 
+    m_IsWorker: 0
+    m_ResourceCost:
+      m_Amounts: []
+    m_Prerequisites:
+    - m_Type: 0
+      m_TargetId: 4c4179d8b31a4bd9b832defdd565b9c0
+      m_Label: a marine exists
+      m_Amount: 0
+      m_Optional: 0
+    m_BranchKey: 
+    m_TagIds: []
+    m_DesignerNotes: Decides whether to take the vs-rush branch.
+    m_Priority: 1
+    m_Optional: 0
+    m_Repeatable: 0
+    m_Status: 0
+    m_ValidationState: 0
+  - m_Id: 9f00e22c39104fc7a556fc3f64525cd7
+    m_Title: Bunker at the ramp
+    m_Description: 
+    m_Type: 8
+    m_Supply: 19
+    m_TimeSeconds: 135
+    m_PopulationRequirement: 0
+    m_PopulationDelta: 0
     m_EstimatedDuration: 0
     m_SupplyProvided: 0
     m_ProvidesFacilityId: 
@@ -117,20 +315,223 @@ MonoBehaviour:
       - m_ResourceId: minerals
         m_Amount: 100
     m_Prerequisites: []
+    m_BranchKey: vs-rush
+    m_TagIds:
+    - army
+    m_DesignerNotes: Only if the scout found early aggression.
+    m_Priority: 1
+    m_Optional: 1
+    m_Repeatable: 0
+    m_Status: 0
+    m_ValidationState: 0
+  - m_Id: 467ce3c4c65e4aceb940c4add5015723
+    m_Title: Supply Depot
+    m_Description: 
+    m_Type: 1
+    m_Supply: 20
+    m_TimeSeconds: 145
+    m_PopulationRequirement: 0
+    m_PopulationDelta: 0
+    m_EstimatedDuration: 21
+    m_SupplyProvided: 8
+    m_ProvidesFacilityId: 
+    m_ProducedByFacilityId: 
+    m_IsWorker: 0
+    m_ResourceCost:
+      m_Amounts:
+      - m_ResourceId: minerals
+        m_Amount: 100
+    m_Prerequisites: []
     m_BranchKey: 
-    m_TagIds: []
+    m_TagIds:
+    - economy
     m_DesignerNotes: 
     m_Priority: 1
     m_Optional: 0
     m_Repeatable: 0
     m_Status: 0
     m_ValidationState: 0
-  - m_Id: e1453991394a444c814b1a214900780c
-    m_Title: Scout with worker
+  - m_Id: b24dc9de36624fe48f3453d80cdd3d8e
+    m_Title: Second base
     m_Description: 
-    m_Type: 4
-    m_Supply: 13
-    m_TimeSeconds: 35
+    m_Type: 6
+    m_Supply: 20
+    m_TimeSeconds: 160
+    m_PopulationRequirement: 0
+    m_PopulationDelta: 0
+    m_EstimatedDuration: 0
+    m_SupplyProvided: 0
+    m_ProvidesFacilityId: 
+    m_ProducedByFacilityId: 
+    m_IsWorker: 0
+    m_ResourceCost:
+      m_Amounts:
+      - m_ResourceId: minerals
+        m_Amount: 400
+    m_Prerequisites: []
+    m_BranchKey: 
+    m_TagIds:
+    - economy
+    m_DesignerNotes: 
+    m_Priority: 1
+    m_Optional: 0
+    m_Repeatable: 0
+    m_Status: 0
+    m_ValidationState: 0
+  - m_Id: cc16879acb8c4b27af3b1411e0d77dbd
+    m_Title: Factory
+    m_Description: 
+    m_Type: 1
+    m_Supply: 21
+    m_TimeSeconds: 190
+    m_PopulationRequirement: 0
+    m_PopulationDelta: 0
+    m_EstimatedDuration: 60
+    m_SupplyProvided: 0
+    m_ProvidesFacilityId: factory
+    m_ProducedByFacilityId: 
+    m_IsWorker: 0
+    m_ResourceCost:
+      m_Amounts:
+      - m_ResourceId: minerals
+        m_Amount: 200
+      - m_ResourceId: gas
+        m_Amount: 100
+    m_Prerequisites:
+    - m_Type: 1
+      m_TargetId: barracks
+      m_Label: Barracks
+      m_Amount: 0
+      m_Optional: 0
+    m_BranchKey: 
+    m_TagIds:
+    - tech
+    m_DesignerNotes: 
+    m_Priority: 1
+    m_Optional: 0
+    m_Repeatable: 0
+    m_Status: 0
+    m_ValidationState: 0
+  - m_Id: b02bc76effe345b6affbfa46814b3447
+    m_Title: Weapons +1
+    m_Description: 
+    m_Type: 2
+    m_Supply: 21
+    m_TimeSeconds: 215
+    m_PopulationRequirement: 0
+    m_PopulationDelta: 0
+    m_EstimatedDuration: 114
+    m_SupplyProvided: 0
+    m_ProvidesFacilityId: 
+    m_ProducedByFacilityId: 
+    m_IsWorker: 0
+    m_ResourceCost:
+      m_Amounts:
+      - m_ResourceId: minerals
+        m_Amount: 100
+      - m_ResourceId: gas
+        m_Amount: 100
+    m_Prerequisites: []
+    m_BranchKey: 
+    m_TagIds:
+    - tech
+    m_DesignerNotes: 
+    m_Priority: 1
+    m_Optional: 0
+    m_Repeatable: 0
+    m_Status: 0
+    m_ValidationState: 0
+  - m_Id: e8c18f1e10744f48b5eaf9db601d7ee9
+    m_Title: Supply Depot
+    m_Description: 
+    m_Type: 1
+    m_Supply: 22
+    m_TimeSeconds: 240
+    m_PopulationRequirement: 0
+    m_PopulationDelta: 0
+    m_EstimatedDuration: 21
+    m_SupplyProvided: 8
+    m_ProvidesFacilityId: 
+    m_ProducedByFacilityId: 
+    m_IsWorker: 0
+    m_ResourceCost:
+      m_Amounts:
+      - m_ResourceId: minerals
+        m_Amount: 100
+    m_Prerequisites: []
+    m_BranchKey: 
+    m_TagIds:
+    - economy
+    m_DesignerNotes: 
+    m_Priority: 1
+    m_Optional: 0
+    m_Repeatable: 0
+    m_Status: 0
+    m_ValidationState: 0
+  - m_Id: 1ea8fb0c737843cb97b9813bb0887197
+    m_Title: Siege Tank
+    m_Description: 
+    m_Type: 0
+    m_Supply: 25
+    m_TimeSeconds: 258
+    m_PopulationRequirement: 0
+    m_PopulationDelta: 3
+    m_EstimatedDuration: 32
+    m_SupplyProvided: 0
+    m_ProvidesFacilityId: 
+    m_ProducedByFacilityId: factory
+    m_IsWorker: 0
+    m_ResourceCost:
+      m_Amounts:
+      - m_ResourceId: minerals
+        m_Amount: 150
+      - m_ResourceId: gas
+        m_Amount: 125
+    m_Prerequisites: []
+    m_BranchKey: 
+    m_TagIds:
+    - army
+    m_DesignerNotes: 
+    m_Priority: 1
+    m_Optional: 0
+    m_Repeatable: 0
+    m_Status: 0
+    m_ValidationState: 0
+  - m_Id: af326e724361410eb47ded25b2c33461
+    m_Title: Siege Tank
+    m_Description: 
+    m_Type: 0
+    m_Supply: 28
+    m_TimeSeconds: 292
+    m_PopulationRequirement: 0
+    m_PopulationDelta: 3
+    m_EstimatedDuration: 32
+    m_SupplyProvided: 0
+    m_ProvidesFacilityId: 
+    m_ProducedByFacilityId: factory
+    m_IsWorker: 0
+    m_ResourceCost:
+      m_Amounts:
+      - m_ResourceId: minerals
+        m_Amount: 150
+      - m_ResourceId: gas
+        m_Amount: 125
+    m_Prerequisites: []
+    m_BranchKey: 
+    m_TagIds:
+    - army
+    m_DesignerNotes: 
+    m_Priority: 1
+    m_Optional: 0
+    m_Repeatable: 0
+    m_Status: 0
+    m_ValidationState: 0
+  - m_Id: a8e793854eaf495a90673c94360ac810
+    m_Title: Hold position until tanks are out
+    m_Description: 
+    m_Type: 9
+    m_Supply: 28
+    m_TimeSeconds: 300
     m_PopulationRequirement: 0
     m_PopulationDelta: 0
     m_EstimatedDuration: 0
@@ -143,57 +544,68 @@ MonoBehaviour:
     m_Prerequisites: []
     m_BranchKey: 
     m_TagIds: []
-    m_DesignerNotes: 
+    m_DesignerNotes: "Reminder rather than an action \u2014 Note steps cost nothing
+      and produce nothing."
     m_Priority: 1
     m_Optional: 0
     m_Repeatable: 0
     m_Status: 0
     m_ValidationState: 0
-  - m_Id: d5d8e9aafb80406f8bcd4889d1d0f033
-    m_Title: First attack wave
-    m_Description: 
-    m_Type: 5
-    m_Supply: 16
-    m_TimeSeconds: 120
-    m_PopulationRequirement: 0
-    m_PopulationDelta: 0
-    m_EstimatedDuration: 0
-    m_SupplyProvided: 0
-    m_ProvidesFacilityId: 
-    m_ProducedByFacilityId: 
-    m_IsWorker: 0
-    m_ResourceCost:
-      m_Amounts: []
-    m_Prerequisites: []
-    m_BranchKey: 
-    m_TagIds: []
-    m_DesignerNotes: 
-    m_Priority: 1
-    m_Optional: 0
-    m_Repeatable: 0
-    m_Status: 0
-    m_ValidationState: 0
-  m_Branches: []
-  m_Tags: []
+  m_Branches:
+  - m_Key: vs-rush
+    m_Name: Against an early rush
+    m_Description: 'Taken when scouting finds early aggression: bunker first, expansion
+      delayed.'
+    m_ColorHex: '#E0894A'
+    m_Condition:
+      m_Variable: enemy.earlyAggression
+      m_Operator: 0
+      m_Value: true
+      m_Description: Scout saw a rush build.
+  m_Tags:
+  - m_Id: economy
+    m_Label: economy
+    m_ColorHex: '#F2C74C'
+  - m_Id: army
+    m_Label: army
+    m_ColorHex: '#E0594A'
+  - m_Id: tech
+    m_Label: tech
+    m_ColorHex: '#A68CF2'
   m_ResourceModel:
   - m_ResourceId: minerals
     m_StartingAmount: 50
-    m_IncomePerSecond: 1.4
+    m_IncomePerSecond: 7
+  - m_ResourceId: gas
+    m_StartingAmount: 0
+    m_IncomePerSecond: 2
   m_Benchmarks:
-  - m_Label: Pool timing
-    m_AnchorTimeSeconds: 40
+  - m_Label: Economy on track
+    m_AnchorTimeSeconds: 60
     m_CheckSupply: 1
-    m_ExpectedSupply: 13
+    m_ExpectedSupply: 3
+    m_RequiredStepId: 
+    m_ToleranceSeconds: 5
+  - m_Label: Factory online
+    m_AnchorTimeSeconds: 200
+    m_CheckSupply: 0
+    m_ExpectedSupply: 0
+    m_RequiredStepId: cc16879acb8c4b27af3b1411e0d77dbd
+    m_ToleranceSeconds: 5
+  - m_Label: Mech push ready
+    m_AnchorTimeSeconds: 300
+    m_CheckSupply: 1
+    m_ExpectedSupply: 12
     m_RequiredStepId: 
     m_ToleranceSeconds: 5
   m_CleanBuild:
-    m_Enabled: 0
+    m_Enabled: 1
     m_StartingSupplyCap: 15
     m_CheckSupplyBlocks: 1
     m_CheckStockpiling: 1
     m_CheckIdleProduction: 1
     m_CheckWorkerGaps: 1
-    m_StockpileThreshold: 400
-    m_MaxFacilityIdleSeconds: 25
+    m_StockpileThreshold: 500
+    m_MaxFacilityIdleSeconds: 30
     m_MaxWorkerGapSeconds: 20
   m_Snapshots: []
