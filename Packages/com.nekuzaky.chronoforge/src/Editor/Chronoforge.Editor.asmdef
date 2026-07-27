@@ -2,7 +2,9 @@
     "name": "Chronoforge.Editor",
     "rootNamespace": "Chronoforge.Editor",
     "references": [
-        "Chronoforge.Runtime"
+        "Chronoforge.Runtime",
+        "Chronoforge.Demo",
+        "Chronoforge.Overlay"
     ],
     "includePlatforms": [
         "Editor"

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -26,6 +27,7 @@ namespace Chronoforge.Editor
             Add(MakeButton("Export Text…", ExportText));
             Add(MakeButton("Export JSON…", ExportJson));
             Add(MakeButton("Import JSON…", ImportJson));
+            Add(MakeButton("Import CSV…", ImportCsv));
 
             var history = new Label("HISTORY");
             history.AddToClassList("cf-section-header");
@@ -73,6 +75,33 @@ namespace Chronoforge.Editor
             }
         }
 
+        private void ImportCsv()
+        {
+            string path = EditorUtility.OpenFilePanel("Import Build Order (CSV/TSV)", "", "csv,tsv,txt");
+            if (string.IsNullOrEmpty(path))
+                return;
+
+            string text = File.ReadAllText(path);
+            List<BuildOrderStep> parsed = BuildOrderCsvImporter.Parse(text, out string error);
+            if (parsed.Count == 0)
+            {
+                EditorUtility.DisplayDialog("Chronoforge — CSV import", string.IsNullOrEmpty(error) ? "No rows found." : error, "OK");
+                return;
+            }
+
+            bool replace = EditorUtility.DisplayDialog(
+                "Chronoforge — CSV import",
+                $"Parsed {parsed.Count} steps. Replace the current build order, or append?",
+                "Replace",
+                "Append");
+
+            _context.RecordUndo(replace ? "Import CSV (replace)" : "Import CSV (append)");
+            if (replace)
+                _context.m_Asset.m_Steps.Clear();
+            _context.m_Asset.m_Steps.AddRange(parsed);
+            _context.Load(_context.m_Asset);
+        }
+
         private void TakeSnapshot()
         {
             BuildOrderAsset asset = _context.m_Asset;
@@ -83,7 +112,7 @@ namespace Chronoforge.Editor
                 m_Label = $"Snapshot {asset.m_Snapshots.Count + 1}",
                 m_TimestampUtc = DateTime.UtcNow.ToString("O"),
                 m_Author = asset.m_Author,
-                m_Json = BuildOrderSerializer.ExportJson(asset)
+                m_Json = BuildOrderSerializer.ExportJson(asset, includeHistory: false)
             });
             _context.NotifyChanged();
         }

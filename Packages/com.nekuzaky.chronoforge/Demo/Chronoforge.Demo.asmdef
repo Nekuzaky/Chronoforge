@@ -1,0 +1,17 @@
+{
+    "name": "Chronoforge.Demo",
+    "rootNamespace": "Chronoforge.Demo",
+    "references": [
+        "Chronoforge.Runtime",
+        "Chronoforge.Overlay"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

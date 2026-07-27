@@ -42,8 +42,7 @@ namespace Chronoforge.Editor
 
         private static string BuildSummary(BuildOrderAsset asset)
         {
-            var evaluation = BuildOrderSimulator.Evaluate(asset);
-            evaluation.m_Issues.AddRange(BuildOrderValidator.Validate(asset));
+            var evaluation = BuildOrderEvaluation.Run(asset);
             return $"{asset.m_Steps.Count} steps · {asset.m_Branches.Count} branches · " +
                    $"{BuildOrderTime.Format(evaluation.m_TotalSeconds)} total · " +
                    $"{evaluation.ErrorCount} errors, {evaluation.WarningCount} warnings";

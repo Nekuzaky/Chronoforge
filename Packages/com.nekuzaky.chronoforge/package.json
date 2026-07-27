@@ -1,6 +1,6 @@
 {
   "name": "com.nekuzaky.chronoforge",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "displayName": "Chronoforge",
   "description": "Premium build order editor for Unity. Author, simulate, validate, compare and export build orders for RTS, colony sims, tactical and management games — faster than a spreadsheet. Keyboard-first workflow, generic data model, strict runtime/editor separation.",
   "unity": "6000.0",
