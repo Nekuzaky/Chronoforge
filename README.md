@@ -8,7 +8,7 @@ Author, simulate, validate, compare and export build orders for RTS, colony sims
 tactical and management games — faster than a spreadsheet or a text file.
 
 [![Unity](https://img.shields.io/badge/Unity-6000.0%2B-000000?logo=unity)](https://unity.com/releases/unity-6)
-[![Release](https://img.shields.io/badge/release-v0.2.0-4C9AFF)](https://github.com/Nekuzaky/Chronoforge/releases)
+[![Release](https://img.shields.io/badge/release-v0.3.0-4C9AFF)](https://github.com/Nekuzaky/Chronoforge/releases)
 [![License](https://img.shields.io/badge/license-MIT-8C9BAB)](LICENSE.md)
 [![UPM](https://img.shields.io/badge/UPM-git%20url-35C46A)](#installation)
 [![Code style](https://img.shields.io/badge/style-runtime%2Feditor%20split-6C5CE7)](CONTRIBUTING.md)

@@ -4,9 +4,15 @@ All notable changes to Chronoforge are documented here. Format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning is
 [SemVer](https://semver.org/).
 
-## [Unreleased]
+## [0.3.0]
+
+First release with the full authoring suite, the runtime overlay and the clean-build
+analysis. Schema v4; v1–v3 payloads still import.
 
 ### Added
+- **Rich demo** — `Chronoforge ▸ Create Demo Scene` generates a 19-step worked example (tags,
+  branch, benchmarks, economy model, production data) wired to the overlay, plus an on-screen
+  guide. The sample carries two deliberate flaws so the analysis has something to report.
 - **Multi-selection** in the step list (`Shift`/`Ctrl` click). Copy, duplicate and delete act on
   the whole selection; the details panel edits the primary step and says so.
 - **Copy / cut / paste steps** (`Ctrl+C` / `X` / `V`) via `BuildOrderStepClipboard` — serialized
