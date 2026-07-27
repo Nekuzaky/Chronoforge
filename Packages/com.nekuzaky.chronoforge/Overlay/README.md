@@ -6,12 +6,15 @@ missed. Rendered with **runtime UI Toolkit**.
 
 ## Setup
 
-1. Run **Chronoforge ▸ Create Overlay Setup** once — it creates the `PanelSettings`
-   asset runtime UI Toolkit requires. (Runtime UI Toolkit renders nothing without one;
-   if the project has no `ThemeStyleSheet` yet, the dialog tells you how to make one.)
+1. Run **Chronoforge ▸ Create Overlay Setup** once. Runtime UI Toolkit renders nothing
+   without a `PanelSettings` asset and a `ThemeStyleSheet`, so this creates both — the
+   theme is written to Unity's own `Assets/UI Toolkit/UnityDefaultRuntimeTheme.tss`, so
+   it is the same asset Unity reuses if you later create PanelSettings by hand.
 2. Add **Build Order Overlay** to a GameObject. Unity adds the required `UIDocument`;
    assign the PanelSettings asset to it.
 3. Assign your `BuildOrderAsset` to the overlay.
+
+**Chronoforge ▸ Create Demo Scene** does all of this for you.
 
 ## Driving it from your game
 

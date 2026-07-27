@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -15,6 +16,14 @@ namespace Chronoforge.Editor
         private const string k_PanelPath = k_Folder + "/Chronoforge Overlay Panel.asset";
 
         /// <summary>
+        /// Unity's own location and filename for the default runtime theme, so a theme we generate
+        /// is the same asset Unity would reuse if the user later creates PanelSettings by hand.
+        /// </summary>
+        private const string k_ThemeFolder = "Assets/UI Toolkit";
+        private const string k_ThemePath = k_ThemeFolder + "/UnityDefaultRuntimeTheme.tss";
+        private const string k_DefaultThemeSource = "@import url(\"unity-theme://default\");\n";
+
+        /// <summary>
         /// Returns the shared PanelSettings, creating it if needed. Returns null when no
         /// ThemeStyleSheet exists in the project — runtime UI Toolkit cannot render without one.
         /// </summary>
@@ -27,13 +36,12 @@ namespace Chronoforge.Editor
             if (existing != null)
                 return existing;
 
-            ThemeStyleSheet theme = FindTheme();
+            ThemeStyleSheet theme = FindOrCreateTheme();
             if (theme == null)
             {
                 error =
-                    "No ThemeStyleSheet found in the project. Create one via " +
-                    "Assets ▸ Create ▸ UI Toolkit ▸ Panel Settings Asset (Unity generates the default " +
-                    "runtime theme alongside it), then run this again.";
+                    "Could not create a runtime theme at " + k_ThemePath + ". Create one via " +
+                    "Assets ▸ Create ▸ UI Toolkit ▸ Panel Settings Asset, then run this again.";
                 return null;
             }
 
@@ -81,6 +89,25 @@ namespace Chronoforge.Editor
                 "PanelSettings ready at:\n" + k_PanelPath +
                 "\n\nAdd a Build Order Overlay component to a GameObject; assign this asset to its UIDocument.",
                 "OK");
+        }
+
+        /// <summary>
+        /// Returns any theme already in the project, otherwise writes Unity's default runtime
+        /// theme — a one-line .tss that imports the built-in theme — so setup never asks the user
+        /// to go and create an asset by hand.
+        /// </summary>
+        private static ThemeStyleSheet FindOrCreateTheme()
+        {
+            ThemeStyleSheet existing = FindTheme();
+            if (existing != null)
+                return existing;
+
+            if (!AssetDatabase.IsValidFolder(k_ThemeFolder))
+                AssetDatabase.CreateFolder("Assets", "UI Toolkit");
+
+            File.WriteAllText(k_ThemePath, k_DefaultThemeSource);
+            AssetDatabase.ImportAsset(k_ThemePath, ImportAssetOptions.ForceSynchronousImport);
+            return AssetDatabase.LoadAssetAtPath<ThemeStyleSheet>(k_ThemePath);
         }
 
         private static ThemeStyleSheet FindTheme()
